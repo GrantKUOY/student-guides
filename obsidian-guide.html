@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obsidian 入門講義</title>
+  <style>
+    :root {
+      --bg: #f7efe3;
+      --surface: rgba(255, 251, 246, 0.88);
+      --surface-strong: rgba(255, 255, 255, 0.94);
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --line: rgba(31, 47, 57, 0.12);
+      --teal: #0f7b76;
+      --amber: #df8f36;
+      --berry: #893654;
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
+        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .page {
+      width: min(780px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+
+    .hero {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 249, 240, 0.82)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.14), rgba(15, 123, 118, 0.12));
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(12px);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(31, 47, 57, 0.07);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--amber), var(--berry));
+    }
+
+    h1 {
+      margin: 14px 0 8px;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p { color: var(--muted); font-size: 1rem; }
+
+    .step {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(12px);
+      margin-top: 18px;
+      padding: 24px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--teal), #0fa19a);
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+
+    .step-header h2 {
+      font-size: 1.15rem;
+      line-height: 1.3;
+    }
+
+    .step p, .step li { color: var(--ink); line-height: 1.8; }
+    .step ul, .step ol { padding-left: 1.4em; margin: 8px 0; }
+    .step li { margin: 4px 0; }
+
+    .code-block {
+      background: #1e2030;
+      color: #c8d3f5;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin: 12px 0;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .code-block .comment { color: #636da6; }
+    .code-block .highlight { color: #c3e88d; }
+    .code-block .keyword { color: #ffc777; }
+
+    .diagram {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 12px 0;
+      font-family: "Cascadia Code", monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre;
+      text-align: center;
+    }
+
+    .tip {
+      background: rgba(15, 123, 118, 0.08);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 0.95rem;
+    }
+
+    .tip strong { color: var(--teal); }
+
+    .warning {
+      background: rgba(223, 143, 54, 0.1);
+      border-left: 4px solid var(--amber);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 0.95rem;
+    }
+
+    .warning strong { color: #8a5615; }
+
+    .checkpoint {
+      background: linear-gradient(135deg, rgba(15, 123, 118, 0.12), rgba(15, 123, 118, 0.06));
+      border: 2px solid rgba(15, 123, 118, 0.3);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-weight: 700;
+      color: var(--teal);
+      text-align: center;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      text-align: left;
+    }
+
+    th {
+      background: rgba(31, 47, 57, 0.05);
+      font-weight: 800;
+    }
+
+    kbd {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #e8e0d4;
+      border: 1px solid #ccc3b5;
+      font-family: inherit;
+      font-size: 0.88em;
+      font-weight: 700;
+    }
+
+    .challenge {
+      background: linear-gradient(135deg, rgba(137, 54, 84, 0.1), rgba(137, 54, 84, 0.04));
+      border: 2px solid rgba(137, 54, 84, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin: 14px 0;
+    }
+
+    .challenge h3 { color: var(--berry); margin-bottom: 10px; }
+    .challenge li { margin: 6px 0; }
+
+    .toc {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin: 18px 0;
+    }
+
+    .toc h3 { margin-bottom: 10px; font-size: 1rem; }
+    .toc a {
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .toc a:hover { text-decoration: underline; }
+    .toc ol { padding-left: 1.4em; }
+    .toc li { margin: 6px 0; }
+
+    @media (max-width: 600px) {
+      .page { padding: 12px 0 40px; }
+      .hero, .step { padding: 20px 16px; }
+      .code-block { font-size: 0.82rem; padding: 12px 14px; }
+      .diagram { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <span class="eyebrow">學生講義</span>
+    <h1>Obsidian 入門講義</h1>
+    <p>用 Obsidian 打造你的學習筆記本，從國一用到國三。</p>
+  </div>
+
+  <div class="toc">
+    <h3>目錄</h3>
+    <ol>
+      <li><a href="#what">什麼是 Obsidian？</a></li>
+      <li><a href="#install">安裝 Obsidian</a></li>
+      <li><a href="#ui">認識介面</a></li>
+      <li><a href="#markdown">學會基本格式（Markdown）</a></li>
+      <li><a href="#folders">建立資料夾結構</a></li>
+      <li><a href="#first-note">寫你的第一篇筆記</a></li>
+      <li><a href="#links">連結筆記</a></li>
+      <li><a href="#daily">每天的使用流程</a></li>
+      <li><a href="#challenge">小挑戰</a></li>
+      <li><a href="#cheatsheet">Markdown 速查表</a></li>
+    </ol>
+  </div>
+
+  <!-- 什麼是 Obsidian -->
+  <div class="step" id="what">
+    <div class="step-header">
+      <div class="step-num">?</div>
+      <h2>什麼是 Obsidian？</h2>
+    </div>
+    <p>Obsidian 是一個<strong>筆記軟體</strong>，但跟 Word 或 Google Docs 很不一樣：</p>
+    <ul>
+      <li>所有筆記都存在你自己的電腦裡，是<strong>純文字檔案</strong>（<code>.md</code> 檔）</li>
+      <li>筆記跟筆記之間可以<strong>互相連結</strong>，就像網頁上的超連結一樣</li>
+      <li>你的筆記永遠是你的，不會被鎖在某個雲端服務裡</li>
+    </ul>
+    <div class="tip">
+      <strong>想像一下：</strong>你有一本超強筆記本——每一頁都可以跳到其他相關的頁面，而且永遠不會弄丟。
+    </div>
+  </div>
+
+  <!-- 步驟 1：安裝 -->
+  <div class="step" id="install">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <h2>安裝 Obsidian</h2>
+    </div>
+    <ol>
+      <li>打開瀏覽器，前往 <strong>obsidian.md</strong></li>
+      <li>點「<strong>Download</strong>」，下載 Windows 版本</li>
+      <li>執行安裝檔，一路按下一步就好</li>
+      <li>打開 Obsidian，你會看到歡迎畫面</li>
+      <li>選擇「<strong>建立新的 Vault</strong>」</li>
+      <li>名稱輸入：<code>學習筆記</code></li>
+      <li>存放位置選擇你的 <strong>OneDrive 資料夾</strong></li>
+      <li>按下「建立」</li>
+    </ol>
+    <div class="checkpoint">確認成功：你會看到一個乾淨的 Obsidian 畫面，左邊是空的檔案列表。</div>
+    <div class="warning">
+      <strong>重要：</strong>vault 一定要建在 OneDrive 資料夾裡面，這樣學校和家裡的電腦才會自動同步。
+    </div>
+  </div>
+
+  <!-- 步驟 2：介面 -->
+  <div class="step" id="ui">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <h2>認識介面</h2>
+    </div>
+    <p>Obsidian 的畫面分成兩個主要區域：</p>
+    <div class="diagram">
+┌──────────┬─────────────────────────────┐
+│          │                             │
+│  檔案    │      編輯區                  │
+│  列表    │   （你寫筆記的地方）          │
+│          │                             │
+└──────────┴─────────────────────────────┘</div>
+    <ul>
+      <li><strong>左邊</strong>：你的所有筆記和資料夾（跟檔案總管很像）</li>
+      <li><strong>中間</strong>：寫筆記的地方</li>
+    </ul>
+    <p>兩件事記住就好：</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>動作</th><th>方法</th></tr>
+        <tr><td>建立新筆記</td><td>按 <kbd>Ctrl</kbd> + <kbd>N</kbd></td></tr>
+        <tr><td>存檔</td><td><strong>不用！</strong>Obsidian 會自動儲存</td></tr>
+      </table>
+    </div>
+    <div class="tip">
+      <strong>沒錯：</strong>完全不需要按 <kbd>Ctrl</kbd> + <kbd>S</kbd>，寫了就自動存好了。
+    </div>
+  </div>
+
+  <!-- 步驟 3：Markdown -->
+  <div class="step" id="markdown">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <h2>學會基本格式（Markdown）</h2>
+    </div>
+    <p>Obsidian 用一種叫 <strong>Markdown</strong> 的格式來寫筆記。聽起來很技術，但其實超簡單。你現在只需要學 <strong>5 個東西</strong>：</p>
+    <div class="code-block"><span class="keyword">#</span> 大標題
+<span class="keyword">##</span> 小標題
+<span class="highlight">-</span> 重點一
+<span class="highlight">-</span> 重點二
+<span class="keyword">**</span>粗體強調<span class="keyword">**</span></div>
+    <p>就這樣，沒了。一個一個看：</p>
+
+    <h3>標題</h3>
+    <p>在文字前面加 <code>#</code> 和一個空格，就變成標題：</p>
+    <div class="code-block"><span class="keyword">#</span> 這是大標題
+<span class="keyword">##</span> 這是小標題
+<span class="keyword">###</span> 這是更小的標題</div>
+    <p><code>#</code> 越多，標題越小。通常用 <code>#</code> 和 <code>##</code> 就夠了。</p>
+
+    <h3>列表</h3>
+    <p>在文字前面打 <code>- </code>（減號加一個空格），就會變成列表：</p>
+    <div class="code-block"><span class="highlight">-</span> 第一個重點
+<span class="highlight">-</span> 第二個重點
+<span class="highlight">-</span> 第三個重點</div>
+
+    <h3>粗體</h3>
+    <p>用兩個星號把文字包起來，就會變粗體：</p>
+    <div class="code-block">這裡有一個<span class="keyword">**</span>很重要<span class="keyword">**</span>的觀念</div>
+    <p>顯示出來會是：這裡有一個<strong>很重要</strong>的觀念</p>
+
+    <h3>看看效果</h3>
+    <p>按 <kbd>Ctrl</kbd> + <kbd>E</kbd> 可以在「編輯模式」和「閱讀模式」之間切換：</p>
+    <ul>
+      <li><strong>編輯模式</strong>：你會看到 <code>#</code> 和 <code>**</code> 這些符號</li>
+      <li><strong>閱讀模式</strong>：符號消失，顯示漂亮的排版效果</li>
+    </ul>
+    <div class="tip"><strong>試試看：</strong>切換看看，感受一下差別！</div>
+  </div>
+
+  <!-- 步驟 4：資料夾 -->
+  <div class="step" id="folders">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <h2>建立你的資料夾結構</h2>
+    </div>
+    <p>就像整理書包一樣，我們先把資料夾建好：</p>
+    <div class="diagram">
+學習筆記/
+├── 國文/
+├── 英文/
+├── 數學/
+├── 自然/
+├── 社會/
+└── 電腦/</div>
+    <p><strong>怎麼建資料夾：</strong></p>
+    <ol>
+      <li>在左邊的檔案列表空白處，<strong>按右鍵</strong></li>
+      <li>選「<strong>新增資料夾</strong>」</li>
+      <li>輸入資料夾名稱（例如 <code>國文</code>）</li>
+      <li>按 Enter</li>
+    </ol>
+    <p>重複 6 次，把上面的資料夾都建好。</p>
+    <div class="checkpoint">建完之後，左邊應該會出現 6 個資料夾，就像你書桌上的 6 個分類資料夾一樣。</div>
+  </div>
+
+  <!-- 步驟 5：第一篇筆記 -->
+  <div class="step" id="first-note">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <h2>寫你的第一篇筆記</h2>
+    </div>
+    <p>來實際寫一篇筆記吧！跟著做：</p>
+    <ol>
+      <li>按 <kbd>Ctrl</kbd> + <kbd>N</kbd>，建立新筆記</li>
+      <li>最上面的標題打：<code>數學_比與比值</code></li>
+      <li>把這篇筆記<strong>拖進</strong>左邊的「數學」資料夾（用滑鼠拖放就好）</li>
+      <li>開始寫內容！</li>
+    </ol>
+    <p>你可以參考下面這個範本：</p>
+    <div class="code-block"><span class="keyword">#</span> 比與比值
+
+<span class="keyword">##</span> 今天學了什麼
+<span class="highlight">-</span> 比的定義：兩個數量的比較
+<span class="highlight">-</span> 比值 = 前項 ÷ 後項
+<span class="highlight">-</span> 比可以化簡（跟分數一樣）
+
+<span class="keyword">##</span> 重要公式
+<span class="highlight">-</span> a：b 的比值 = a/b
+
+<span class="keyword">##</span> 例題
+<span class="highlight">-</span> 3：5 的比值 = 3/5 = 0.6
+<span class="highlight">-</span> 6：4 的比值 = 6/4 = 1.5
+
+<span class="keyword">##</span> 還不懂的地方
+<span class="highlight">-</span> 為什麼比值可以是小數？
+<span class="highlight">-</span> 比跟分數到底差在哪裡？</div>
+    <div class="tip">
+      <strong>小提醒：</strong>「還不懂的地方」這一區超好用。下次上課前先看一眼，就知道要特別注意聽哪裡。
+    </div>
+  </div>
+
+  <!-- 步驟 6：連結 -->
+  <div class="step" id="links">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <h2>連結筆記（Obsidian 的超能力）</h2>
+    </div>
+    <p>這是 Obsidian 最厲害的功能——<strong>筆記之間可以互相連結</strong>。</p>
+
+    <h3>怎麼做</h3>
+    <p>在筆記裡打兩個左方括號 <code>[[</code>，然後輸入另一篇筆記的名稱，再打兩個右方括號 <code>]]</code>：</p>
+    <div class="code-block">今天學的比與比值，跟之前學的 <span class="highlight">[[數學_分數運算]]</span> 有關。</div>
+
+    <h3>會發生什麼</h3>
+    <ul>
+      <li><code>[[數學_分數運算]]</code> 會變成一個<strong>可以點擊的連結</strong></li>
+      <li>點下去就會跳到那篇筆記</li>
+      <li>如果那篇筆記還不存在，Obsidian 會用虛線顯示，點下去會自動幫你建立</li>
+    </ul>
+
+    <h3>為什麼這很厲害</h3>
+    <p>想像你在寫自然筆記「密度」的時候，發現需要用到數學的「比與比值」：</p>
+    <div class="code-block">密度 = 質量 ÷ 體積，其實就是一種 <span class="highlight">[[數學_比與比值]]</span></div>
+    <div class="tip">
+      <strong>重點：</strong>這樣你的知識就不再是一科一科分開的，而是<strong>互相連起來的網路</strong>。這就是 Obsidian 跟一般 Word 檔或紙本筆記最大的不同。
+    </div>
+  </div>
+
+  <!-- 每天的使用流程 -->
+  <div class="step" id="daily">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <h2>每天的使用流程</h2>
+    </div>
+    <p>每天只需要花 5 分鐘：</p>
+    <ol>
+      <li><strong>打開</strong> Obsidian</li>
+      <li><kbd>Ctrl</kbd> + <kbd>N</kbd> 建立新筆記</li>
+      <li><strong>標題格式</strong>：<code>科目_主題</code>（例如：<code>英文_現在完成式</code>、<code>自然_密度</code>）</li>
+      <li><strong>拖進</strong>對應的資料夾</li>
+      <li><strong>寫筆記</strong>，用 <code>#</code> 分段、<code>-</code> 列重點</li>
+      <li>有關聯的就打 <code>[[連結]]</code> 連過去</li>
+    </ol>
+    <div class="tip"><strong>就這樣，不需要做更多。先養成習慣最重要。</strong></div>
+  </div>
+
+  <!-- 小挑戰 -->
+  <div class="step" id="challenge">
+    <div class="step-header">
+      <div class="step-num">!</div>
+      <h2>小挑戰</h2>
+    </div>
+    <div class="challenge">
+      <h3>今天回家後，請完成以下任務：</h3>
+      <ul>
+        <li>挑<strong>一科</strong>，寫一篇課堂筆記</li>
+        <li>筆記裡要用到：<code>#</code> 標題、<code>-</code> 列表</li>
+        <li>至少打一個 <code>[[連結]]</code>（連到任何你覺得相關的主題）</li>
+      </ul>
+      <p style="margin-top:10px; color: var(--muted);">不用寫很多，半頁就好。重點是動手做一次！</p>
+    </div>
+  </div>
+
+  <!-- 速查表 -->
+  <div class="step" id="cheatsheet">
+    <div class="step-header">
+      <div class="step-num">*</div>
+      <h2>Markdown 速查表</h2>
+    </div>
+    <p>把這張表記起來，寫筆記就夠用了：</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>你打的文字</th><th>顯示效果</th><th>說明</th></tr>
+        <tr><td><code># 標題</code></td><td>大標題</td><td>井字號 + 空格</td></tr>
+        <tr><td><code>## 小標題</code></td><td>小標題</td><td>兩個井字號 + 空格</td></tr>
+        <tr><td><code>- 項目</code></td><td>列表圓點</td><td>減號 + 空格</td></tr>
+        <tr><td><code>**粗體**</code></td><td><strong>粗體</strong></td><td>兩個星號包起來</td></tr>
+        <tr><td><code>[[筆記名]]</code></td><td>可點擊的連結</td><td>兩個方括號包起來</td></tr>
+      </table>
+    </div>
+    <div class="tip">
+      <strong>之後等你用習慣了，我們再學更多功能。現在先把這些練熟就好！</strong>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
