@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>國中生如何跟 AI 有效對話</title>
+  <meta name="description" content="給國中學生的 AI 對話入門講義。從 AI 的正確定位、4 種基本問法，到每一步該怎麼問與做完標準。">
+  <style>
+    :root {
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --teal: #0f7b76;
+      --amber: #df8f36;
+      --berry: #893654;
+      --line: rgba(31, 47, 57, 0.12);
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
+        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+    }
+
+    .page {
+      width: min(920px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+
+    .hero,
+    .section {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 240, 0.84)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.12), rgba(15, 123, 118, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin-top: 18px;
+    }
+
+    .hero { margin-top: 0; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(31, 47, 57, 0.07);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--amber), var(--berry));
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.26rem;
+    }
+
+    p { margin: 0 0 12px; color: var(--muted); }
+
+    .toc {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-top: 18px;
+    }
+
+    .toc ol,
+    .section ol,
+    .section ul { padding-left: 1.3em; margin: 10px 0; }
+    .toc li, .section li { margin: 6px 0; }
+    .toc a { text-decoration: none; color: var(--teal); font-weight: 700; }
+
+    .step-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .step-num {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--teal), #0fa19a);
+      color: #fff;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .why, .do, .check, .tip, .warn {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin: 14px 0;
+    }
+
+    .why {
+      background: rgba(15, 123, 118, 0.08);
+      border-left: 4px solid var(--teal);
+      color: var(--ink);
+    }
+
+    .do {
+      background: rgba(137, 54, 84, 0.08);
+      border-left: 4px solid var(--berry);
+      color: var(--ink);
+    }
+
+    .check {
+      background: linear-gradient(135deg, rgba(15, 123, 118, 0.12), rgba(15, 123, 118, 0.06));
+      border: 2px solid rgba(15, 123, 118, 0.24);
+      color: var(--teal);
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .tip {
+      background: rgba(223, 143, 54, 0.1);
+      border-left: 4px solid var(--amber);
+      color: var(--ink);
+    }
+
+    .warn {
+      background: rgba(31, 47, 57, 0.05);
+      border-left: 4px solid rgba(31, 47, 57, 0.2);
+      color: var(--ink);
+    }
+
+    .code {
+      background: #1e2030;
+      color: #d8e3ff;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin: 12px 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 16px;
+    }
+
+    .card {
+      background: rgba(255, 251, 246, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .card strong { display: block; margin-bottom: 8px; color: var(--ink); }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), #15958f);
+    }
+
+    .button.secondary {
+      color: var(--teal);
+      background: rgba(15, 123, 118, 0.1);
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 12px 0 40px; }
+      .hero, .section { padding: 20px 16px; }
+      .code { font-size: 0.82rem; padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <span class="eyebrow">學生講義</span>
+    <h1>國中生如何跟 AI 有效對話</h1>
+    <p>這份講義不是教你炫技，而是教你把 AI 變成學習助手。你會知道每一步要問什麼、為什麼這樣問，以及做完怎樣算真的有學到。</p>
+    <div class="button-row">
+      <a class="button" href="ai-dialogue-practice.html">直接看提問模板與練習單</a>
+      <a class="button secondary" href="student-guides.html">回學生入口</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <strong>目錄</strong>
+    <ol>
+      <li><a href="#role">AI 的正確角色</a></li>
+      <li><a href="#rule">開始前先記住 3 條規則</a></li>
+      <li><a href="#step1">步驟 1：先說你在學什麼</a></li>
+      <li><a href="#step2">步驟 2：再說你卡在哪裡</a></li>
+      <li><a href="#step3">步驟 3：指定 AI 要怎麼幫你</a></li>
+      <li><a href="#step4">步驟 4：學會 4 種基本問法</a></li>
+      <li><a href="#step5">步驟 5：不要直接拿答案</a></li>
+      <li><a href="#finish">今天做完就算成功的標準</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="role">
+    <div class="step-head">
+      <div class="step-num">?</div>
+      <h2>AI 的正確角色</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <strong>AI 不是答案機器</strong>
+        <p>如果你每次都只叫 AI 給答案，你會越來越像在抄作業，不像在學習。</p>
+      </div>
+      <div class="card">
+        <strong>AI 比較像家教</strong>
+        <p>它可以解釋、出題、檢查、提示，幫你把不懂的地方講清楚。</p>
+      </div>
+      <div class="card">
+        <strong>學會問，才真的有幫助</strong>
+        <p>同一個 AI，如果你問得太空，幫助很少；如果你說清楚卡點，幫助就很大。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="rule">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <h2>開始前先記住 3 條規則</h2>
+    </div>
+    <ol>
+      <li>先自己想 30 秒，再問 AI。</li>
+      <li>問 AI 時要說清楚「我卡在哪裡」。</li>
+      <li>如果想自己練，記得說「先不要直接給答案」。</li>
+    </ol>
+    <div class="check">你要把 AI 用成學習助手，不是直接幫你做完的人。</div>
+  </div>
+
+  <div class="section" id="step1">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <h2>步驟 1：先說你在學什麼</h2>
+    </div>
+    <div class="why"><strong>為什麼要先說這個：</strong>如果你只問「這題怎麼寫」，AI 不知道你是哪個科目、哪個單元，也不知道你現在的程度。</div>
+    <div class="do">
+      <strong>你現在要做什麼：</strong>
+      <ol>
+        <li>先用一句話說明你在學什麼。</li>
+        <li>只要講出科目 + 主題就可以。</li>
+      </ol>
+    </div>
+    <div class="code">我現在在學：國二數學的比例
+我現在在學：英文現在完成式
+我現在在學：APCS 的陣列</div>
+    <div class="check">完成標準：你能先把「主題」說出來，而不是直接丟一句「我不會」。</div>
+  </div>
+
+  <div class="section" id="step2">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <h2>步驟 2：再說你卡在哪裡</h2>
+    </div>
+    <div class="why"><strong>為什麼這一步最重要：</strong>學習最大的問題通常不是完全不會，而是卡在某一個小地方。只要說清楚卡點，AI 才比較能精準幫你。</div>
+    <div class="do">
+      <strong>你現在要做什麼：</strong>
+      <ol>
+        <li>用一句話說你哪裡看不懂。</li>
+        <li>不要只說「我不會」，要說「我搞不懂哪裡」。</li>
+      </ol>
+    </div>
+    <div class="code">我卡住的地方：我不知道比和比值差在哪裡
+我卡住的地方：我看不懂這題為什麼要先排序
+我卡住的地方：我分不出現在完成式和過去式什麼時候用</div>
+    <div class="check">完成標準：你能把「不懂」縮小成一個具體問題。</div>
+  </div>
+
+  <div class="section" id="step3">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <h2>步驟 3：指定 AI 要怎麼幫你</h2>
+    </div>
+    <div class="why"><strong>為什麼要指定：</strong>AI 可以做很多事。如果你不說，它可能回答得太長、太難，或直接把答案講完。</div>
+    <div class="do">
+      <strong>你現在要做什麼：</strong>
+      <ol>
+        <li>選一種你要的幫忙方式。</li>
+        <li>直接講出來，例如：解釋、出題、檢查、提示。</li>
+      </ol>
+    </div>
+    <div class="code">請用國中生聽得懂的方式解釋
+請先出 2 題讓我練習，不要先給答案
+請幫我檢查這段整理哪裡有錯
+請只給我下一步提示，不要直接講答案</div>
+    <div class="check">完成標準：你的問題最後面有清楚說明「你要 AI 怎麼幫」。</div>
+  </div>
+
+  <div class="section" id="step4">
+    <div class="step-head">
+      <div class="step-num">4</div>
+      <h2>步驟 4：學會 4 種基本問法</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <strong>問法 1：請 AI 解釋</strong>
+        <p>當你聽不懂一個觀念時用。重點是要請它講簡單一點，最好加例子。</p>
+      </div>
+      <div class="card">
+        <strong>問法 2：請 AI 出題</strong>
+        <p>當你學完一個單元，想確認自己會不會時用。先不要看答案。</p>
+      </div>
+      <div class="card">
+        <strong>問法 3：請 AI 檢查</strong>
+        <p>當你已經自己寫過重點或答案時用。這比直接抄 AI 的版本更有用。</p>
+      </div>
+      <div class="card">
+        <strong>問法 4：請 AI 提示</strong>
+        <p>當你想自己練，但卡住時用。這種問法最能保留思考。</p>
+      </div>
+    </div>
+    <div class="tip"><strong>最實用的完整句型：</strong></div>
+    <div class="code">我現在在學：
+我卡住的地方：
+我已經想到：
+請你怎麼幫我：</div>
+  </div>
+
+  <div class="section" id="step5">
+    <div class="step-head">
+      <div class="step-num">5</div>
+      <h2>步驟 5：不要直接拿答案</h2>
+    </div>
+    <div class="warn"><strong>不建議這樣問：</strong>「這題答案是什麼？」「幫我做作業」「幫我整理這課。」這種問法很快，但學得很淺。</div>
+    <div class="do">
+      <strong>比較好的問法：</strong>
+      <ul>
+        <li>我先自己做過了，請幫我看哪一步可能有錯。</li>
+        <li>先不要直接給答案，請用提示帶我想。</li>
+        <li>請先出 2 題讓我練，我做完再請你改。</li>
+      </ul>
+    </div>
+    <div class="check">完成標準：你今天至少有一次不是直接要答案，而是請 AI 幫你思考。</div>
+  </div>
+
+  <div class="section" id="finish">
+    <div class="step-head">
+      <div class="step-num">OK</div>
+      <h2>今天做完就算成功的標準</h2>
+    </div>
+    <ol>
+      <li>你能用「我在學什麼 + 我卡在哪裡 + 你怎麼幫我」問出一個完整問題。</li>
+      <li>你至少試過 1 種基本問法。</li>
+      <li>你有把 AI 回答變成自己的理解，而不是只看過去。</li>
+    </ol>
+    <div class="button-row">
+      <a class="button" href="ai-dialogue-practice.html">下一步：直接做練習</a>
+      <a class="button secondary" href="student-route-general.html">看一般資優生路線</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

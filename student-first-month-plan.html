@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>學生第一個月使用路線圖</title>
+  <meta name="description" content="給國中學生的 Obsidian 第一個月使用路線圖，知道每一週做什麼、為什麼這樣安排。">
+  <style>
+    :root {
+      --bg: #f7efe3;
+      --surface: rgba(255, 251, 246, 0.9);
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --line: rgba(31, 47, 57, 0.12);
+      --teal: #0f7b76;
+      --amber: #df8f36;
+      --berry: #893654;
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
+        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+    }
+
+    .page {
+      width: min(900px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+
+    .hero,
+    .week {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 240, 0.84)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.12), rgba(15, 123, 118, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin-top: 18px;
+    }
+
+    .hero { margin-top: 0; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(31, 47, 57, 0.07);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    h2 { margin: 0 0 10px; font-size: 1.22rem; }
+    p { margin: 0 0 12px; color: var(--muted); }
+
+    .week-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .week-num {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--teal), #0fa19a);
+      color: #fff;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    ul {
+      padding-left: 1.3em;
+      margin: 10px 0;
+    }
+
+    li { margin: 6px 0; }
+
+    .why,
+    .goal {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+
+    .why {
+      background: rgba(15, 123, 118, 0.08);
+      border-left: 4px solid var(--teal);
+    }
+
+    .goal {
+      background: rgba(223, 143, 54, 0.1);
+      border-left: 4px solid var(--amber);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), #15958f);
+    }
+
+    .button.secondary {
+      background: rgba(15, 123, 118, 0.1);
+      color: var(--teal);
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 12px 0 40px; }
+      .hero, .week { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <span class="eyebrow">學生講義</span>
+    <h1>第一個月使用路線圖</h1>
+    <p>這份路線圖的目的，是讓你不要一下學太多。每一週只做一點點，但知道這一步為什麼重要。</p>
+    <div class="button-row">
+      <a class="button" href="obsidian-guide.html">回 Obsidian 入門講義</a>
+      <a class="button secondary" href="student-note-templates.html">看模板</a>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <div class="week-num">W1</div>
+      <h2>第 1 週：只養成打開與記錄的習慣</h2>
+    </div>
+    <ul>
+      <li>完成 Obsidian 安裝與資料夾建立。</li>
+      <li>每天至少寫一篇 `每日學習紀錄`。</li>
+      <li>每天只寫 3 到 5 行也可以。</li>
+    </ul>
+    <div class="why"><strong>為什麼這樣安排：</strong>很多人一開始失敗，不是因為不會，而是系統太重。第一週只做最簡單的事，先讓自己願意每天打開。</div>
+    <div class="goal"><strong>本週成功標準：</strong>連續 5 天有留下每日紀錄。</div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <div class="week-num">W2</div>
+      <h2>第 2 週：開始把知識整理成單元筆記</h2>
+    </div>
+    <ul>
+      <li>維持每日紀錄。</li>
+      <li>這一週每科至少整理 1 篇單元筆記。</li>
+      <li>單元筆記只整理一個主題，不求多。</li>
+    </ul>
+    <div class="why"><strong>為什麼這樣安排：</strong>當你已經會記「今天做了什麼」，接下來就要開始記「這個知識到底在學什麼」。</div>
+    <div class="goal"><strong>本週成功標準：</strong>至少完成 3 篇單元筆記。</div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <div class="week-num">W3</div>
+      <h2>第 3 週：加入錯題整理</h2>
+    </div>
+    <ul>
+      <li>從數學、英文、自然或 APCS 練習中挑錯題來寫。</li>
+      <li>每次只整理 1 題也可以。</li>
+      <li>重點不是答案，而是自己為什麼會錯。</li>
+    </ul>
+    <div class="why"><strong>為什麼這樣安排：</strong>真正能讓成績提升的，不是再看一次會的內容，而是找到你反覆錯的地方。</div>
+    <div class="goal"><strong>本週成功標準：</strong>完成至少 3 篇錯題整理。</div>
+  </div>
+
+  <div class="week">
+    <div class="week-head">
+      <div class="week-num">W4</div>
+      <h2>第 4 週：回顧與微調自己的系統</h2>
+    </div>
+    <ul>
+      <li>回頭看這一個月的每日紀錄。</li>
+      <li>找出你最常卡住的科目或主題。</li>
+      <li>想一件事就好：下個月要改進哪一點。</li>
+    </ul>
+    <div class="why"><strong>為什麼這樣安排：</strong>筆記不是為了堆很多篇，而是幫你看見自己的學習習慣與問題點。</div>
+    <div class="goal"><strong>本週成功標準：</strong>寫一篇「這個月我學到了什麼」的回顧。</div>
+  </div>
+</div>
+</body>
+</html>

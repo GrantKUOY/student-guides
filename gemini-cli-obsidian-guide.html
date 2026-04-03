@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>進階選修：Gemini CLI 如何協助 Obsidian</title>
+  <meta name="description" content="給進階學生與老師的 Gemini CLI + Obsidian 進階選修講義，說明什麼時候適合用、先怎麼用、有哪些風險與限制。">
+  <style>
+    :root {
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --teal: #0f7b76;
+      --amber: #df8f36;
+      --berry: #893654;
+      --line: rgba(31, 47, 57, 0.12);
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
+        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+    }
+
+    .page {
+      width: min(940px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+
+    .hero,
+    .section {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 240, 0.84)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.12), rgba(15, 123, 118, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin-top: 18px;
+    }
+
+    .hero { margin-top: 0; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(31, 47, 57, 0.07);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--amber), var(--berry));
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    h2 { margin: 0; font-size: 1.25rem; }
+    p { margin: 0 0 12px; color: var(--muted); }
+
+    .toc {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-top: 18px;
+    }
+
+    .toc ol,
+    .section ol,
+    .section ul { padding-left: 1.3em; margin: 10px 0; }
+    .toc li, .section li { margin: 6px 0; }
+    .toc a { text-decoration: none; color: var(--teal); font-weight: 700; }
+
+    .step-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .step-num {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--berry), #b15375);
+      color: #fff;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .why,
+    .do,
+    .check,
+    .warn,
+    .tip {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin: 14px 0;
+    }
+
+    .why {
+      background: rgba(15, 123, 118, 0.08);
+      border-left: 4px solid var(--teal);
+      color: var(--ink);
+    }
+
+    .do {
+      background: rgba(137, 54, 84, 0.08);
+      border-left: 4px solid var(--berry);
+      color: var(--ink);
+    }
+
+    .check {
+      background: linear-gradient(135deg, rgba(15, 123, 118, 0.12), rgba(15, 123, 118, 0.06));
+      border: 2px solid rgba(15, 123, 118, 0.24);
+      color: var(--teal);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .warn {
+      background: rgba(223, 143, 54, 0.12);
+      border-left: 4px solid var(--amber);
+      color: var(--ink);
+    }
+
+    .tip {
+      background: rgba(31, 47, 57, 0.05);
+      border-left: 4px solid rgba(31, 47, 57, 0.22);
+      color: var(--ink);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 16px;
+    }
+
+    .card {
+      background: rgba(255, 251, 246, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .card strong { display: block; margin-bottom: 8px; color: var(--ink); }
+
+    .code {
+      background: #1e2030;
+      color: #d8e3ff;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin: 12px 0;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--berry), #b15375);
+    }
+
+    .button.secondary {
+      color: var(--berry);
+      background: rgba(137, 54, 84, 0.1);
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 12px 0 40px; }
+      .hero, .section { padding: 20px 16px; }
+      .code { font-size: 0.82rem; padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <span class="eyebrow">進階選修</span>
+    <h1>Gemini CLI 如何協助 Obsidian</h1>
+    <p>這不是新手起點，而是進階選修。適合老師，或已經穩定使用 Obsidian 和 AI 對話一段時間的學生。重點不是讓 AI 代你寫筆記，而是幫你搜尋、整理、比對與回顧。</p>
+    <div class="button-row">
+      <a class="button" href="student-guides.html">回學生首頁</a>
+      <a class="button secondary" href="student-route-apcs.html">看 APCS 路線</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <strong>目錄</strong>
+    <ol>
+      <li><a href="#fit">什麼時候適合使用</a></li>
+      <li><a href="#not-fit">什麼時候不適合</a></li>
+      <li><a href="#can-do">它最適合幫你的 4 件事</a></li>
+      <li><a href="#safe-start">安全起步方式</a></li>
+      <li><a href="#workflow">建議的使用流程</a></li>
+      <li><a href="#limit">限制與風險</a></li>
+      <li><a href="#finish">這頁看完後的行動建議</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="fit">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <h2>什麼時候適合使用</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <strong>你已經會用 Obsidian</strong>
+        <p>至少已經會寫每日紀錄、單元筆記、錯題整理，不會再被檔案和資料夾搞混。</p>
+      </div>
+      <div class="card">
+        <strong>你已經會和 AI 對話</strong>
+        <p>你知道怎麼說明自己在學什麼、卡在哪裡、希望 AI 怎麼幫你。</p>
+      </div>
+      <div class="card">
+        <strong>你想加速整理，不是逃避整理</strong>
+        <p>你是想讓 AI 幫你找資料、整理脈絡、回顧內容，而不是叫它代你思考。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="not-fit">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <h2>什麼時候不適合</h2>
+    </div>
+    <div class="warn">
+      <strong>下面這些情況先不要用：</strong>
+      <ul>
+        <li>你還不會自己開 Obsidian、建立筆記、分類資料夾。</li>
+        <li>你還不太會跟 AI 對話，常常只會問「幫我做」或「直接給答案」。</li>
+        <li>你還沒有穩定的筆記習慣。</li>
+        <li>你希望 AI 直接幫你改整個 Obsidian 筆記庫。</li>
+      </ul>
+    </div>
+    <div class="check">一句話判斷：如果你還在學怎麼記筆記，就不要先學 Gemini CLI。</div>
+  </div>
+
+  <div class="section" id="can-do">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <h2>它最適合幫你的 4 件事</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <strong>1. 搜尋筆記</strong>
+        <p>幫你找出筆記庫裡所有提到某個主題、題型或觀念的內容。</p>
+      </div>
+      <div class="card">
+        <strong>2. 整理脈絡</strong>
+        <p>把你分散在不同筆記中的重點、錯題、紀錄整理成一份回顧。</p>
+      </div>
+      <div class="card">
+        <strong>3. 幫你回顧</strong>
+        <p>像考前一樣，從現有筆記中抓出常見錯誤和重要觀念。</p>
+      </div>
+      <div class="card">
+        <strong>4. 比對進步</strong>
+        <p>比較你這個月和上個月的學習紀錄，看你卡點有沒有改變。</p>
+      </div>
+    </div>
+    <div class="tip"><strong>最好的定位：</strong>把它當成會幫你查資料和整理資料的研究助理。</div>
+  </div>
+
+  <div class="section" id="safe-start">
+    <div class="step-head">
+      <div class="step-num">4</div>
+      <h2>安全起步方式</h2>
+    </div>
+    <div class="why"><strong>為什麼要保守起步：</strong>Gemini CLI 如果接上 MCP 和可寫工具，理論上能改你的筆記。對學生來說，這不是第一步應該開放的能力。</div>
+    <div class="do">
+      <strong>建議一開始只做這些：</strong>
+      <ol>
+        <li>只開 `read / list / search` 類能力。</li>
+        <li>不要一開始就開 `write / replace / delete`。</li>
+        <li>先拿測試 vault 練習，不直接碰正式主筆記庫。</li>
+        <li>不要開永久自動批准工具操作。</li>
+      </ol>
+    </div>
+    <div class="check">安全起步原則：先讓它會看、會找、會整理，再考慮讓它動手改。</div>
+  </div>
+
+  <div class="section" id="workflow">
+    <div class="step-head">
+      <div class="step-num">5</div>
+      <h2>建議的使用流程</h2>
+    </div>
+    <ol>
+      <li>你先在 Obsidian 自己寫紀錄、單元筆記或錯題整理。</li>
+      <li>再用 Gemini CLI 幫你搜尋和彙整已有內容。</li>
+      <li>看完 Gemini CLI 的整理後，你再自己決定要不要補寫正式筆記。</li>
+    </ol>
+    <div class="code">先自己寫
+→ 再請 Gemini CLI 幫我查和整理
+→ 最後由我自己決定正式筆記怎麼寫</div>
+    <div class="tip"><strong>這很重要：</strong>主筆記仍然應該以你自己的理解為主，Gemini CLI 只是幫你加速找與整合。</div>
+  </div>
+
+  <div class="section" id="limit">
+    <div class="step-head">
+      <div class="step-num">6</div>
+      <h2>限制與風險</h2>
+    </div>
+    <ul>
+      <li>它需要額外安裝和設定，門檻比聊天式 AI 高很多。</li>
+      <li>如果接到第三方 Obsidian MCP server，安全性取決於你怎麼設定權限。</li>
+      <li>如果你太早依賴它，會降低自己整理筆記的能力。</li>
+      <li>不適合完全沒接觸過 Obsidian 的新手當起點。</li>
+    </ul>
+    <div class="warn"><strong>最常見錯誤：</strong>把進階工具誤認成學習起點。這樣通常只會讓人更亂，不會更快。</div>
+  </div>
+
+  <div class="section" id="finish">
+    <div class="step-head">
+      <div class="step-num">OK</div>
+      <h2>這頁看完後的行動建議</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <strong>如果你是一般資優生</strong>
+        <p>先回去完成 Obsidian 和 AI 對話主線，不用急著碰 Gemini CLI。</p>
+      </div>
+      <div class="card">
+        <strong>如果你是 APCS 較強學生</strong>
+        <p>等你穩定使用 2 到 4 週後，再考慮用 Gemini CLI 做唯讀查詢與整理。</p>
+      </div>
+      <div class="card">
+        <strong>如果你是老師</strong>
+        <p>可以先用它協助整理學生學習紀錄或彙整筆記，再決定是否要教進階學生。</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

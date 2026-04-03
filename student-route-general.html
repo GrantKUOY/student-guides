@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>一般資優生學習路線</title>
+  <meta name="description" content="適合電腦接觸較少、但學科能力很強的學生使用的學習路線。先建立 Obsidian 與 AI 對話基本功，再穩定擴充。">
+  <style>
+    :root {
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --teal: #0f7b76;
+      --amber: #df8f36;
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
+        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+    }
+    .page {
+      width: min(920px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+    .hero, .stage {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 240, 0.84)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.12), rgba(15, 123, 118, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin-top: 18px;
+    }
+    .hero { margin-top: 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(31, 47, 57, 0.07);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    h2 { margin: 0 0 10px; font-size: 1.24rem; }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .num {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--teal), #0fa19a);
+      color: #fff;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    ul { padding-left: 1.3em; margin: 10px 0; }
+    li { margin: 6px 0; }
+    .why, .goal {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+    .why {
+      background: rgba(15, 123, 118, 0.08);
+      border-left: 4px solid var(--teal);
+    }
+    .goal {
+      background: rgba(223, 143, 54, 0.1);
+      border-left: 4px solid var(--amber);
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), #15958f);
+    }
+    .button.secondary {
+      color: var(--teal);
+      background: rgba(15, 123, 118, 0.1);
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <span class="eyebrow">學生路線</span>
+    <h1>一般資優生學習路線</h1>
+    <p>這條路線適合學科能力強，但對電腦工具還不熟的學生。重點不是先玩進階工具，而是先把筆記習慣和 AI 對話能力建立起來。</p>
+    <div class="button-row">
+      <a class="button" href="obsidian-guide.html">先做 Obsidian 入門</a>
+      <a class="button secondary" href="ai-dialogue-guide.html">再學 AI 對話</a>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="head">
+      <div class="num">1</div>
+      <h2>先建立固定學習系統</h2>
+    </div>
+    <ul>
+      <li>先完成 Obsidian 筆記本與資料夾。</li>
+      <li>每天寫每日紀錄。</li>
+      <li>每週補各科單元筆記。</li>
+    </ul>
+    <div class="why"><strong>原因：</strong>這類學生通常不是不會學，而是還沒有穩定的數位學習系統。</div>
+    <div class="goal"><strong>目標：</strong>先做到每週穩定留下學習痕跡。</div>
+  </div>
+
+  <div class="stage">
+    <div class="head">
+      <div class="num">2</div>
+      <h2>再讓 AI 幫你理解與練習</h2>
+    </div>
+    <ul>
+      <li>先學會請 AI 解釋不懂的內容。</li>
+      <li>再學會請 AI 出題和檢查。</li>
+      <li>把 AI 對話結果記回 Obsidian。</li>
+    </ul>
+    <div class="why"><strong>原因：</strong>AI 在這條路線上的角色是「家教」，不是「工具工程師」。</div>
+    <div class="goal"><strong>目標：</strong>讓 AI 幫助理解，不是代替思考。</div>
+  </div>
+
+  <div class="stage">
+    <div class="head">
+      <div class="num">3</div>
+      <h2>最後才考慮更進階的電腦工具</h2>
+    </div>
+    <ul>
+      <li>如果已經穩定用 1 到 2 個月，再考慮更多功能。</li>
+      <li>第一階段不用碰 CLI、MCP、Gemini CLI。</li>
+      <li>先把內容學習做穩，比工具升級更重要。</li>
+    </ul>
+    <div class="why"><strong>原因：</strong>太早導入高技術門檻工具，容易把注意力從學習內容拉走。</div>
+    <div class="goal"><strong>目標：</strong>先成為會學習的人，再成為會用工具的人。</div>
+  </div>
+</div>
+</body>
+</html>

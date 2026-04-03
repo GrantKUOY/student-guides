@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>APCS 較強學生學習路線</title>
+  <meta name="description" content="適合 APCS 已有基礎的學生使用的學習路線。從 Obsidian 與題解紀錄，到 AI 輔助與進階工具整合。">
+  <style>
+    :root {
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --teal: #0f7b76;
+      --amber: #df8f36;
+      --berry: #893654;
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
+        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+    }
+    .page {
+      width: min(920px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+    .hero, .stage {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 240, 0.84)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.12), rgba(15, 123, 118, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin-top: 18px;
+    }
+    .hero { margin-top: 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(31, 47, 57, 0.07);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    h2 { margin: 0 0 10px; font-size: 1.24rem; }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .num {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--berry), #b15375);
+      color: #fff;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    ul { padding-left: 1.3em; margin: 10px 0; }
+    li { margin: 6px 0; }
+    .why, .goal {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+    .why {
+      background: rgba(137, 54, 84, 0.08);
+      border-left: 4px solid var(--berry);
+    }
+    .goal {
+      background: rgba(223, 143, 54, 0.1);
+      border-left: 4px solid var(--amber);
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--berry), #b15375);
+    }
+    .button.secondary {
+      color: var(--berry);
+      background: rgba(137, 54, 84, 0.1);
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <span class="eyebrow">學生路線</span>
+    <h1>APCS 較強學生學習路線</h1>
+    <p>這條路線適合已經有 APCS 基礎、對程式自學有興趣的學生。目標是把練題經驗、錯誤原因與 AI 輔助方法整合起來。</p>
+    <div class="button-row">
+      <a class="button" href="obsidian-guide.html">先做 Obsidian 入門</a>
+      <a class="button secondary" href="ai-dialogue-guide.html">再學 AI 對話</a>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="head">
+      <div class="num">1</div>
+      <h2>先把自學過程記錄下來</h2>
+    </div>
+    <ul>
+      <li>每天留下程式自學紀錄。</li>
+      <li>整理題型、觀念、bug 和 debug 過程。</li>
+      <li>把 APCS 與學校課業放在同一套系統內。</li>
+    </ul>
+    <div class="why"><strong>原因：</strong>這類學生常常不是沒能力，而是學過的東西太零散。</div>
+    <div class="goal"><strong>目標：</strong>建立自己的題解與錯誤經驗資料庫。</div>
+  </div>
+
+  <div class="stage">
+    <div class="head">
+      <div class="num">2</div>
+      <h2>用 AI 做高品質練習</h2>
+    </div>
+    <ul>
+      <li>請 AI 出題，不先給答案。</li>
+      <li>請 AI 用提示帶你 debug。</li>
+      <li>請 AI 檢查你的思路，而不是直接重寫整份程式。</li>
+    </ul>
+    <div class="why"><strong>原因：</strong>對 APCS 而言，真正重要的是思路和除錯能力，不是複製一份看起來正確的程式。</div>
+    <div class="goal"><strong>目標：</strong>把 AI 用成陪練和助教。</div>
+  </div>
+
+  <div class="stage">
+    <div class="head">
+      <div class="num">3</div>
+      <h2>最後才考慮進階工具整合</h2>
+    </div>
+    <ul>
+      <li>等 Obsidian 和 AI 對話都穩定後，再看 Gemini CLI 或其他進階工具。</li>
+      <li>進階工具只適合放在「加速」階段，不適合當起點。</li>
+      <li>如果導入，先從唯讀查詢開始，不先開高風險操作。</li>
+    </ul>
+    <div class="why"><strong>原因：</strong>他有能力學工具，但工具應該服務學習，不應該反過來佔據主線。</div>
+    <div class="goal"><strong>目標：</strong>等基礎穩固後，再讓工具幫你放大效率。</div>
+  </div>
+</div>
+</body>
+</html>

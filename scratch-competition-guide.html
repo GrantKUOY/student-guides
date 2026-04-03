@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scratch 競賽動畫技巧學生自學講義</title>
+  <meta name="description" content="給準備 Scratch 競賽的學生使用的自學講義，學會標題漂浮、按鈕懸浮、角色進場、得分提示、轉場與分身特效。">
+  <style>
+    :root {
+      --bg: #fff8ee;
+      --bg-soft: #fff2d8;
+      --card: rgba(255, 255, 255, 0.86);
+      --ink: #213547;
+      --muted: #536471;
+      --teal: #137a7f;
+      --teal-deep: #0d5457;
+      --coral: #ef6c4c;
+      --sun: #f4b63f;
+      --berry: #a94972;
+      --line: rgba(33, 53, 71, 0.12);
+      --shadow: 0 18px 60px rgba(27, 50, 78, 0.12);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(244, 182, 63, 0.28), transparent 22rem),
+        radial-gradient(circle at top right, rgba(19, 122, 127, 0.18), transparent 24rem),
+        linear-gradient(180deg, #fff7ea 0%, #fffefb 46%, #fff4e2 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(rgba(19, 122, 127, 0.08) 1px, transparent 1px),
+        radial-gradient(rgba(239, 108, 76, 0.08) 1px, transparent 1px);
+      background-position: 0 0, 18px 18px;
+      background-size: 36px 36px;
+      opacity: 0.36;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 32px 30px;
+      border-radius: 34px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 250, 242, 0.86)),
+        linear-gradient(135deg, rgba(239, 108, 76, 0.1), rgba(19, 122, 127, 0.14));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      isolation: isolate;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(2px);
+      opacity: 0.9;
+      z-index: -1;
+      animation: drift 8s ease-in-out infinite;
+    }
+
+    .hero::before {
+      width: 180px;
+      height: 180px;
+      right: -22px;
+      top: -20px;
+      background: radial-gradient(circle, rgba(244, 182, 63, 0.54), rgba(244, 182, 63, 0));
+    }
+
+    .hero::after {
+      width: 220px;
+      height: 220px;
+      left: -60px;
+      bottom: -80px;
+      background: radial-gradient(circle, rgba(19, 122, 127, 0.26), rgba(19, 122, 127, 0));
+      animation-delay: -3s;
+    }
+
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(19, 122, 127, 0.1);
+      color: var(--teal-deep);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .badge::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--sun), var(--coral));
+      box-shadow: 0 0 0 5px rgba(244, 182, 63, 0.15);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3.55rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 760px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .button-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .button-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(19, 122, 127, 0.16);
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), #14979b);
+    }
+
+    .button-secondary {
+      color: var(--teal-deep);
+      background: rgba(19, 122, 127, 0.1);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .hero-card {
+      padding: 18px 18px 16px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(19, 122, 127, 0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.02rem;
+    }
+
+    .hero-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .section-nav {
+      position: sticky;
+      top: 12px;
+      z-index: 5;
+      display: flex;
+      gap: 10px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 16px 4px 10px;
+      margin: 10px 0 20px;
+      scrollbar-width: thin;
+    }
+
+    .section-nav a {
+      flex: 0 0 auto;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(33, 53, 71, 0.08);
+      color: var(--muted);
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(27, 50, 78, 0.08);
+    }
+
+    .section-nav a:hover {
+      color: var(--teal-deep);
+      border-color: rgba(19, 122, 127, 0.25);
+    }
+
+    section {
+      margin-top: 28px;
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      animation: rise 0.6s ease both;
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--berry);
+      background: rgba(169, 73, 114, 0.1);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 1.18rem;
+    }
+
+    h4 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: var(--teal-deep);
+    }
+
+    .lead {
+      margin: 14px 0 0;
+      max-width: 840px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card,
+    .mini-card,
+    .day-card {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 250, 244, 0.86));
+    }
+
+    .card {
+      padding: 20px;
+    }
+
+    .mini-card {
+      padding: 18px;
+    }
+
+    .day-card {
+      padding: 16px;
+    }
+
+    .card p,
+    .mini-card p,
+    .day-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .pill-list,
+    .check-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+      margin: 16px 0 0;
+      list-style: none;
+    }
+
+    .pill-list li,
+    .check-list li {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(19, 122, 127, 0.08);
+      color: var(--teal-deep);
+      font-weight: 700;
+    }
+
+    .steps,
+    .mistake-list,
+    .tip-list {
+      padding-left: 20px;
+      margin: 14px 0 0;
+      color: var(--ink);
+      line-height: 1.9;
+    }
+
+    .steps li + li,
+    .mistake-list li + li,
+    .tip-list li + li {
+      margin-top: 8px;
+    }
+
+    .code-block {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: var(--radius-sm);
+      background:
+        linear-gradient(180deg, #17384b, #122836);
+      color: #f4f8fb;
+      font-family: "Cascadia Code", "Consolas", monospace;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .order-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .order-item {
+      padding: 18px 14px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 247, 232, 0.92));
+      border: 1px solid var(--line);
+    }
+
+    .order-item strong {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.98rem;
+    }
+
+    .order-item span {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--sun), var(--coral));
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .order-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.92rem;
+    }
+
+    .skill-card {
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 252, 246, 0.92));
+    }
+
+    .skill-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .skill-no {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--teal-deep);
+    }
+
+    .skill-no span {
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--teal), #10a5ab);
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(19, 122, 127, 0.2);
+    }
+
+    .skill-tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(244, 182, 63, 0.16);
+      color: #8a5e02;
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+
+    .callout {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(19, 122, 127, 0.09), rgba(255, 255, 255, 0.86));
+      border-left: 5px solid var(--teal);
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .callout p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .check-box {
+      padding: 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 249, 237, 0.92));
+    }
+
+    .check-box h3 {
+      margin-bottom: 12px;
+    }
+
+    .check-box ul {
+      padding-left: 20px;
+      margin: 0;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .day-card strong {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, rgba(239, 108, 76, 0.18), rgba(244, 182, 63, 0.26));
+      color: var(--berry);
+      font-size: 0.95rem;
+    }
+
+    footer {
+      margin-top: 28px;
+      padding: 18px 22px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(33, 53, 71, 0.08);
+      color: var(--muted);
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, 12px, 0); }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-3,
+      .check-grid,
+      .week-grid,
+      .order-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 20px, 1120px);
+        padding-top: 18px;
+      }
+
+      .hero,
+      section {
+        padding: 22px 18px;
+      }
+
+      .hero-grid,
+      .grid-3,
+      .check-grid,
+      .week-grid,
+      .order-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .button-link {
+        width: 100%;
+      }
+
+      .skill-card,
+      .card,
+      .mini-card,
+      .check-box {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-top">
+        <div class="badge">Scratch 競賽學生講義</div>
+        <div class="badge">重點是作品感，不只是做完功能</div>
+      </div>
+      <h1>Scratch 競賽動畫技巧<br>學生自學講義</h1>
+      <p>這份講義是給準備 Scratch 競賽的學生使用。目標不是只把題目做完，而是讓作品看起來更像一個真正完成的作品。你會學到標題漂浮、按鈕懸浮、角色進場、得分提示、場景轉場與分身特效。</p>
+      <div class="hero-actions">
+        <a class="button-link button-primary" href="#order">從學習順序開始</a>
+        <a class="button-link button-secondary" href="#week-plan">直接看賽前一週練法</a>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-card">
+          <strong>你會做到什麼</strong>
+          <p>讓標題會動、按鈕看起來可以按、得分更有回饋、場景切換更自然。</p>
+        </div>
+        <div class="hero-card">
+          <strong>這份講義怎麼用</strong>
+          <p>先照順序練六個技巧，再挑三個加進自己的作品，最後做完整試玩。</p>
+        </div>
+        <div class="hero-card">
+          <strong>真正會拉開差距的地方</strong>
+          <p>不是亂加特效，而是讓功能完成後，畫面看起來有節奏、有反應、有設計。</p>
+        </div>
+      </div>
+    </header>
+
+    <nav class="section-nav" aria-label="章節導覽">
+      <a href="#why">先知道</a>
+      <a href="#order">學習順序</a>
+      <a href="#skill1">漂浮標題</a>
+      <a href="#skill2">懸浮按鈕</a>
+      <a href="#skill3">角色進場</a>
+      <a href="#skill4">得分提示</a>
+      <a href="#skill5">場景轉場</a>
+      <a href="#skill6">分身特效</a>
+      <a href="#skill7">圖像效果</a>
+      <a href="#checklist">練習清單</a>
+      <a href="#mistakes">常犯錯誤</a>
+      <a href="#week-plan">賽前一週</a>
+    </nav>
+
+    <section id="why">
+      <div class="section-kicker">先知道一件事</div>
+      <h2>很多作品不是不會寫，而是還不會做動畫包裝</h2>
+      <p class="lead">很多同學做 Scratch 作品時，會遇到同一個問題：功能有做出來，但是畫面很平，按鈕像圖片，場景切換很硬，遊戲雖然有分數，可是玩起來不夠有感覺。這通常不是程式能力太差，而是還沒有學會把作品包裝成「有生命感的畫面」。</p>
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>畫面太平</h3>
+          <p>標題、按鈕、角色都不動，看起來像投影片，不像互動作品。</p>
+        </div>
+        <div class="mini-card">
+          <h3>操作太硬</h3>
+          <p>場景一按就切、提示一出就沒、玩家感受不到作品有回應。</p>
+        </div>
+        <div class="mini-card">
+          <h3>缺少作品感</h3>
+          <p>題目有做，但沒有節奏、沒有氛圍，最後很難跟其他作品拉開差距。</p>
+        </div>
+      </div>
+      <ul class="pill-list">
+        <li>先完成題目</li>
+        <li>再整理流程</li>
+        <li>最後加動畫與特效</li>
+      </ul>
+    </section>
+
+    <section id="order">
+      <div class="section-kicker">建議順序</div>
+      <h2>先學會讓畫面動起來，再學會讓玩家感覺得到</h2>
+      <p class="lead">請照這個順序練。先讓畫面有生命，再讓玩家感覺到按鈕、角色與分數都有反應，最後才把這些技巧串成完整節奏。</p>
+      <div class="order-grid">
+        <div class="order-item">
+          <strong><span>1</span> 漂浮標題</strong>
+          <p>讓作品一打開就有第一眼的氣氛。</p>
+        </div>
+        <div class="order-item">
+          <strong><span>2</span> 懸浮按鈕</strong>
+          <p>讓玩家知道哪裡可以按。</p>
+        </div>
+        <div class="order-item">
+          <strong><span>3</span> 進場動畫</strong>
+          <p>讓角色與任務不是突然跳出來。</p>
+        </div>
+        <div class="order-item">
+          <strong><span>4</span> 得分提示</strong>
+          <p>讓玩家看得見自己的成功。</p>
+        </div>
+        <div class="order-item">
+          <strong><span>5</span> 轉場動畫</strong>
+          <p>讓場景切換更自然、更專業。</p>
+        </div>
+        <div class="order-item">
+          <strong><span>6</span> 分身特效</strong>
+          <p>讓物件不會每次都一模一樣。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skill1">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-no"><span>1</span> 漂浮標題</div>
+          <div class="skill-tag">讓開場有生命感</div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>你會做出什麼效果</h3>
+            <p>標題不是死死地停在原地，而是像招牌一樣輕輕飄動。玩家一打開作品，就會覺得這個畫面不是靜止的。</p>
+            <h4>你需要的觀念</h4>
+            <ul class="tip-list">
+              <li><strong>計時器 timer</strong>：持續增加的時間數字。</li>
+              <li><strong>sin</strong>：會自己來回變化的數字，適合做搖晃、漂浮、呼吸感。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>為什麼這個效果好看</h3>
+            <p>如果標題完全不動，畫面會很像投影片。只要有一點點穩定的小幅動作，作品就會變得比較有生命感，而且不會吵。</p>
+            <div class="callout">
+              <strong>小提醒</strong>
+              <p>好的動畫通常是小幅度、穩定、重複有節奏，不是越晃越大。</p>
+            </div>
+          </div>
+        </div>
+        <div class="code-block">設 x 座標為 5 * sin(270 * timer)
+設 y 座標為 80 + 5 * sin(360 * timer)</div>
+        <ol class="steps">
+          <li>先決定標題原本要放在哪裡，例如 x = 0、y = 80。</li>
+          <li>讓 x 只做小幅左右變化，y 以原本位置為中心小幅上下漂浮。</li>
+          <li>調整速度數字，例如 270、360，找到最順眼的節奏。</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="skill2">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-no"><span>2</span> 懸浮按鈕</div>
+          <div class="skill-tag">看起來真的可以按</div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>你會做出什麼效果</h3>
+            <p>當滑鼠靠近按鈕時，按鈕會放大、變亮，看起來像真的可以按。這比單純放一張圖片更有互動感。</p>
+            <h4>最好用的觀念</h4>
+            <p>不要一下子把按鈕改成大尺寸，而是讓尺寸慢慢靠近目標值，畫面會更柔順。</p>
+          </div>
+          <div class="card">
+            <h3>怎麼理解慢慢靠近</h3>
+            <p>如果你想把大小從 100 慢慢變成 170，就可以每次只補一部分差距。這樣按鈕不會突然跳大，而是有呼吸感。</p>
+            <div class="code-block">改變尺寸 ((170 - size) / 10)</div>
+          </div>
+        </div>
+        <div class="code-block">如果 碰到 [滑鼠游標 v]？
+  改變尺寸 ((170 - size) / 10)
+  設 [color v] 特效為 (12)
+否則
+  改變尺寸 ((100 - size) / 10)
+  設 [color v] 特效為 (0)</div>
+        <ol class="steps">
+          <li>平常讓按鈕維持正常大小，滑鼠碰到時慢慢變大。</li>
+          <li>搭配顏色效果或亮度效果，讓玩家看得出它被選中了。</li>
+          <li>如果想更活，可以再加上方向小幅搖晃。</li>
+        </ol>
+        <div class="callout">
+          <strong>加分做法</strong>
+          <p>再加上「面朝方向 = 90 + sin(timer * 150) * 10」，按鈕就會有一點點晃動，看起來更活。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skill3">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-no"><span>3</span> 角色進場動畫</div>
+          <div class="skill-tag">讓角色像登場，不是突然出現</div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>你會做出什麼效果</h3>
+            <p>角色不是突然跳出來，而是像「登場」一樣由小變大。這個效果很適合用在關卡標題、任務卡、開始按鈕或過關徽章。</p>
+          </div>
+          <div class="card">
+            <h3>為什麼這樣比較順</h3>
+            <p>直接顯示雖然快，但視覺上很硬。先縮小再慢慢變大，畫面會比較有節奏，玩家也比較看得懂現在有東西要出現。</p>
+          </div>
+        </div>
+        <div class="code-block">當收到 [顯示角色 v]
+移到 x: (0) y: (0)
+顯示
+設尺寸為 (10) %
+重複 (20) 次
+  改變尺寸 ((100 - size) / 10)</div>
+        <ol class="steps">
+          <li>收到廣播後，先移到指定位置，再顯示。</li>
+          <li>尺寸先設很小，例如 10。</li>
+          <li>用慢慢靠近 100 的方式，做出由小變大的感覺。</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="skill4">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-no"><span>4</span> 得分提示</div>
+          <div class="skill-tag">讓成功被看見</div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>你會做出什麼效果</h3>
+            <p>打中目標後，畫面出現 +10 或 +15，然後慢慢往上飄，最後消失。這種效果在遊戲裡很常見，因為玩家能立刻感覺到自己做對了。</p>
+          </div>
+          <div class="card">
+            <h3>為什麼比只改分數好</h3>
+            <p>如果你只改變分數變數，玩家可能看不到角落的數字。畫面上直接跳出得分提示，成就感會更強。</p>
+          </div>
+        </div>
+        <div class="code-block">當收到 [+10 v]
+到 x: (玩家 x) y: (玩家 y)
+顯示
+設 [ghost v] 特效為 (0)
+重複 (20) 次
+  y 改變 (2)
+  改變 [ghost v] 特效 (5)
+隱藏</div>
+        <ol class="steps">
+          <li>把提示文字移到角色附近。</li>
+          <li>讓文字慢慢往上飄。</li>
+          <li>同時增加 ghost，做出越來越透明的感覺。</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="skill5">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-no"><span>5</span> 場景轉場</div>
+          <div class="skill-tag">切場景不再很突兀</div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>你會做出什麼效果</h3>
+            <p>場景切換不是突然跳過去，而是先有一個轉場畫面，再切到下一段。可以是黑幕、招牌、卡片、門簾，甚至是作品自己的主題物件。</p>
+          </div>
+          <div class="card">
+            <h3>為什麼這樣比較專業</h3>
+            <p>有轉場時，玩家比較知道現在進入下一關、下一個任務或下一段劇情，整體流程也會更完整。</p>
+          </div>
+        </div>
+        <div class="code-block">當收到 [轉場開始 v]
+顯示
+設尺寸為 (20) %
+重複 (12) 次
+  改變尺寸 ((110 - size) / 6)
+廣播 [切到下一場景 v]
+等待 (0.3) 秒
+隱藏</div>
+        <ol class="steps">
+          <li>做一個專門負責轉場的角色，不要把所有事情都寫在背景上。</li>
+          <li>收到轉場廣播後，先顯示並做出進場效果。</li>
+          <li>等轉場進場後，再廣播切換背景或任務。</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="skill6">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-no"><span>6</span> 氣球分身與隨機節奏</div>
+          <div class="skill-tag">不要讓每顆物件都長一樣</div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>你會做出什麼效果</h3>
+            <p>物件不會每次都在同一個時間、同一個位置、同一個大小出現。這樣畫面會更像真的遊戲，不會太死板。</p>
+            <h4>你需要的觀念</h4>
+            <ul class="tip-list">
+              <li><strong>clone</strong>：快速複製出很多顆物件。</li>
+              <li><strong>random</strong>：讓每次出現的時間、位置、大小都不固定。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>為什麼這很重要</h3>
+            <p>如果每顆氣球都一樣，玩家很快就會覺得無聊。只要節奏、造型、位置有變化，作品看起來就更有活力。</p>
+          </div>
+        </div>
+        <div class="code-block">當收到 [開始遊戲 v]
+重複直到 <遊戲結束>
+  等待 (隨機取數 (0.2) 到 (2)) 秒
+  建立自己的分身
+
+當我作為分身開始時
+切換造型到 (隨機造型)
+設尺寸為 (隨機取數 (70) 到 (130)) %
+到 x: (隨機取數 (-200) 到 (200)) y: (-170)
+重複直到 <碰到邊緣>
+  y 改變 (隨機取數 (3) 到 (6))
+刪除這個分身</div>
+        <ol class="steps">
+          <li>用等待的亂數，做出不固定的出現節奏。</li>
+          <li>讓分身一開始的造型、大小、位置都可以改變。</li>
+          <li>超出畫面就刪除分身，避免角色越來越多。</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="skill7">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-no"><span>7</span> 亮度、顏色、透明度</div>
+          <div class="skill-tag">最常用也最實用的圖像效果</div>
+        </div>
+        <div class="grid-3">
+          <div class="mini-card">
+            <h3>brightness</h3>
+            <p>適合做燈光感、亮起來的提示、開場淡入。用在按鈕或招牌很有效。</p>
+          </div>
+          <div class="mini-card">
+            <h3>color</h3>
+            <p>適合做滑鼠碰到的變化，或讓角色在特定時刻更有變化。</p>
+          </div>
+          <div class="mini-card">
+            <h3>ghost</h3>
+            <p>適合做淡入淡出、提示消失、角色若隱若現，是最常見的收尾效果。</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>最常用的用途</strong>
+          <p>場景淡入淡出、按鈕滑鼠碰到變亮、提示文字慢慢消失、小裝飾變得若隱若現。這三個效果搭配得好，作品就會看起來很完整。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="checklist">
+      <div class="section-kicker">直接抄走的練習清單</div>
+      <h2>從入門到競賽版，照著做就能快速補強</h2>
+      <div class="check-grid">
+        <div class="check-box">
+          <h3>入門版</h3>
+          <ul>
+            <li>會做漂浮標題</li>
+            <li>會做放大按鈕</li>
+            <li>會做點擊後切換畫面</li>
+          </ul>
+        </div>
+        <div class="check-box">
+          <h3>進階版</h3>
+          <ul>
+            <li>會做由小變大的角色進場</li>
+            <li>會做 +10 飄字</li>
+            <li>會做淡入淡出轉場</li>
+          </ul>
+        </div>
+        <div class="check-box">
+          <h3>競賽版</h3>
+          <ul>
+            <li>會做分身氣球或分身物件</li>
+            <li>會做命中回饋</li>
+            <li>會做三段以上的畫面流程</li>
+            <li>會讓作品有開場、任務、結尾</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <div class="section-kicker">國中生最容易犯的錯</div>
+      <h2>特效不是越多越厲害，重點是順</h2>
+      <div class="grid-2">
+        <div class="card">
+          <ol class="mistake-list">
+            <li><strong>特效太多</strong>：每個角色都亂閃、亂轉、亂放大，最後畫面會很亂。</li>
+            <li><strong>功能還沒完成就先做花招</strong>：正確順序是先讓任務可以玩，再讓流程順，最後才加特效。</li>
+          </ol>
+        </div>
+        <div class="card">
+          <ol class="mistake-list" start="3">
+            <li><strong>所有東西都寫在綠旗底下</strong>：比較好的方式是用廣播分段、用角色分工、用轉場角色控制節奏。</li>
+            <li><strong>動畫太大</strong>：標題如果左右晃太大，反而會看起來很吵。好的動畫通常是小幅度、穩定、有節奏。</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="week-plan">
+      <div class="section-kicker">賽前一週自學建議</div>
+      <h2>一天練一點，不要最後一天才亂補</h2>
+      <p class="lead">如果你離比賽只剩一週，不用全部重做。每天練一個主題，把技巧逐步加進作品，比一次亂改一堆更有效。</p>
+      <div class="week-grid">
+        <div class="day-card">
+          <strong>Day 1</strong>
+          <p>練漂浮標題，練一個會晃動的按鈕。</p>
+        </div>
+        <div class="day-card">
+          <strong>Day 2</strong>
+          <p>練點擊按鈕切場景，練角色進場動畫。</p>
+        </div>
+        <div class="day-card">
+          <strong>Day 3</strong>
+          <p>練 +10 飄字，練 ghost 淡出。</p>
+        </div>
+        <div class="day-card">
+          <strong>Day 4</strong>
+          <p>練分身物件，練不固定時間差。</p>
+        </div>
+        <div class="day-card">
+          <strong>Day 5</strong>
+          <p>練轉場角色，把前面技巧接在一起。</p>
+        </div>
+        <div class="day-card">
+          <strong>Day 6</strong>
+          <p>把自己的競賽作品加上開場、按鈕、轉場、得分回饋。</p>
+        </div>
+        <div class="day-card">
+          <strong>Day 7</strong>
+          <p>從頭到尾完整試玩，修掉太硬、太空、太亂的地方。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-kicker">最後記住</div>
+      <h2>Scratch 競賽作品，通常會在這三件事拉開差距</h2>
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>題目有完成</h3>
+          <p>先把規定功能做出來，能操作、能計分、能完成任務。</p>
+        </div>
+        <div class="mini-card">
+          <h3>操作要順</h3>
+          <p>按鈕清楚、流程清楚、切換自然，玩家不會不知道現在該做什麼。</p>
+        </div>
+        <div class="mini-card">
+          <h3>畫面要有作品感</h3>
+          <p>標題會不會動、按鈕有沒有反應、分數有沒有回饋，常常就是差距所在。</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      本頁內容整理自 Scratch 競賽學生講義與 60523 作品動畫拆解。建議做法是：先完成題目，再挑 3 個技巧加進自己的作品，最後完整試玩與修正。
+    </footer>
+  </main>
+</body>
+</html>

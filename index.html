@@ -3,11 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>學生講義</title>
+  <title>學生自學網站</title>
+  <meta name="description" content="給國中學生的自學網站。從學習筆記、AI 對話到分階段學習路線，幫你一步一步建立可持續的學習系統。">
   <style>
     :root {
-      --bg: #f7efe3;
-      --surface: rgba(255, 251, 246, 0.88);
       --ink: #1f2f39;
       --muted: #60707a;
       --teal: #0f7b76;
@@ -18,8 +17,10 @@
       --radius-lg: 22px;
     }
 
-    * { box-sizing: border-box; margin: 0; }
+    * { box-sizing: border-box; }
+
     body {
+      margin: 0;
       font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
       color: var(--ink);
       background:
@@ -27,27 +28,26 @@
         radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
         linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       padding: 20px;
     }
 
-    .container {
-      width: min(520px, 100%);
-      text-align: center;
+    .page {
+      width: min(920px, 100%);
+      margin: 0 auto;
     }
 
-    .hero {
+    .hero,
+    .section {
       background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 249, 240, 0.82)),
-        linear-gradient(135deg, rgba(223, 143, 54, 0.14), rgba(15, 123, 118, 0.12));
-      border: 1px solid rgba(255, 255, 255, 0.88);
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 240, 0.84)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.12), rgba(15, 123, 118, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
       box-shadow: var(--shadow);
       border-radius: var(--radius-xl);
-      backdrop-filter: blur(12px);
-      padding: 36px 28px;
+      padding: 28px 24px;
     }
+
+    .section { margin-top: 18px; }
 
     .eyebrow {
       display: inline-flex;
@@ -62,91 +62,176 @@
 
     .eyebrow::before {
       content: "";
-      width: 10px; height: 10px;
+      width: 10px;
+      height: 10px;
       border-radius: 999px;
       background: linear-gradient(135deg, var(--amber), var(--berry));
     }
 
     h1 {
-      margin: 16px 0 8px;
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.15;
       letter-spacing: -0.03em;
     }
 
-    .subtitle {
-      color: var(--muted);
-      margin-bottom: 28px;
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.22rem;
     }
 
-    .cards {
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .grid {
       display: grid;
       gap: 14px;
-      margin-top: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin-top: 18px;
     }
 
     .card {
       display: block;
-      background: var(--surface);
+      background: rgba(255, 251, 246, 0.92);
       border: 1px solid rgba(255, 255, 255, 0.88);
-      box-shadow: 0 8px 32px rgba(17, 48, 66, 0.08);
       border-radius: var(--radius-lg);
-      padding: 22px 24px;
+      padding: 20px;
       text-decoration: none;
-      color: var(--ink);
-      transition: transform 0.15s, box-shadow 0.15s;
-      text-align: left;
+      color: inherit;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
     }
 
     .card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(17, 48, 66, 0.14);
+      box-shadow: 0 12px 26px rgba(17, 48, 66, 0.12);
     }
 
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 4px;
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
     }
 
-    .card-desc {
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .card-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px; height: 40px;
-      border-radius: 12px;
-      font-size: 1.3rem;
+    .card small {
+      display: inline-block;
       margin-bottom: 10px;
+      color: var(--teal);
+      font-weight: 800;
     }
 
-    .card:nth-child(1) .card-icon { background: rgba(15, 123, 118, 0.12); }
-    .card:nth-child(2) .card-icon { background: rgba(137, 54, 84, 0.12); }
+    .note {
+      background: rgba(15, 123, 118, 0.08);
+      border-left: 4px solid var(--teal);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+
+    ul {
+      padding-left: 1.3em;
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    li { margin: 6px 0; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="hero">
-      <span class="eyebrow">安和國中</span>
-      <h1>學生講義</h1>
-      <p class="subtitle">選擇你要看的講義</p>
+<div class="page">
+  <div class="hero">
+    <span class="eyebrow">學生講義</span>
+    <h1>學生自學網站</h1>
+    <p>這個網站的目標，不是讓你一次學很多工具，而是陪你一步一步建立自己的學習系統。你會先學會怎麼記筆記、怎麼跟 AI 對話，再依自己的狀況選擇適合的學習路線。</p>
+    <div class="note"><strong>建議使用方式：</strong>先完成兩條主線，再選自己的學習路線。進階選修放在最後，不需要一開始就學。</div>
+  </div>
 
-      <div class="cards">
-        <a class="card" href="obsidian-guide.html">
-          <div class="card-icon">O</div>
-          <div class="card-title">Obsidian 入門講義</div>
-          <div class="card-desc">用 Obsidian 打造你的學習筆記本，從國一用到國三。</div>
-        </a>
-        <a class="card" href="claude-code-guide.html">
-          <div class="card-icon">C</div>
-          <div class="card-title">Claude Code 安裝講義</div>
-          <div class="card-desc">照著做，25 分鐘裝好，讓 AI 陪你練程式。</div>
-        </a>
-      </div>
+  <div class="section">
+    <h2>主線一：建立自己的學習筆記系統</h2>
+    <div class="grid">
+      <a class="card" href="obsidian-guide.html">
+        <small>Step 1</small>
+        <strong>Obsidian 入門講義</strong>
+        <p>從零開始認識 Obsidian，知道為什麼要記筆記、第一個筆記本怎麼建，以及今天先完成哪些事。</p>
+      </a>
+      <a class="card" href="student-note-templates.html">
+        <small>Step 2</small>
+        <strong>學生筆記模板</strong>
+        <p>直接複製就能用的模板，包含每日紀錄、單元筆記、錯題整理與 APCS 自學紀錄。</p>
+      </a>
+      <a class="card" href="student-first-month-plan.html">
+        <small>Step 3</small>
+        <strong>第一個月路線圖</strong>
+        <p>知道第一個月每一週只要做什麼、為什麼這樣安排，避免一開始做太多。</p>
+      </a>
     </div>
   </div>
+
+  <div class="section">
+    <h2>主線二：學會把 AI 用成學習助手</h2>
+    <div class="grid">
+      <a class="card" href="ai-dialogue-guide.html">
+        <small>Step 1</small>
+        <strong>AI 對話入門講義</strong>
+        <p>學會怎麼描述自己在學什麼、卡在哪裡，以及怎麼請 AI 用適合你的方式幫你。</p>
+      </a>
+      <a class="card" href="ai-dialogue-practice.html">
+        <small>Step 2</small>
+        <strong>提問模板與練習單</strong>
+        <p>直接練習各科提問範例，並把 AI 對話記錄進自己的筆記，慢慢學會有效提問。</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>依你的學習狀況選擇路線</h2>
+    <div class="grid">
+      <a class="card" href="student-route-general.html">
+        <small>Route A</small>
+        <strong>一般資優生路線</strong>
+        <p>適合學科能力強、但對電腦工具還不熟的學生。先建立筆記與 AI 對話基本功，再穩定推進各科學習。</p>
+      </a>
+      <a class="card" href="student-route-apcs.html">
+        <small>Route B</small>
+        <strong>APCS 較強學生路線</strong>
+        <p>適合已有 APCS 基礎、想持續精進的學生。把程式自學、題解紀錄、AI 陪練與後續進階工具整合起來。</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>進階選修</h2>
+    <div class="grid">
+      <a class="card" href="gemini-cli-obsidian-guide.html">
+        <small>Advanced</small>
+        <strong>Gemini CLI 如何協助 Obsidian</strong>
+        <p>適合老師或進階學生。說明什麼時候適合用、怎麼安全起步，以及它比較適合做哪些事。</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>其他講義</h2>
+    <div class="grid">
+      <a class="card" href="scratch-competition-guide.html">
+        <small>Extra</small>
+        <strong>Scratch 競賽動畫技巧講義</strong>
+        <p>保留原本的 Scratch 競賽自學內容，適合有需要的學生另外閱讀與練習。</p>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>暫時先不要急著做的事</h2>
+    <ul>
+      <li>不用先學外掛、圖譜、複雜標籤。</li>
+      <li>不用先追求很漂亮的排版。</li>
+      <li>不用急著裝 CLI、MCP 或進階 AI 開發工具。</li>
+      <li>先把每天記錄、每週整理和基本 AI 對話做穩，之後再升級。</li>
+    </ul>
+  </div>
+</div>
 </body>
 </html>
