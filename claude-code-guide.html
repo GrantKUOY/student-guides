@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Claude Code 安裝講義</title>
+  <meta name="description" content="給老師與進階學生的 Claude Code 安裝講義。適合已有程式與終端機基礎者，不建議一般國中學生作為起點。">
   <style>
     :root {
       --bg: #f7efe3;
@@ -186,6 +187,31 @@
       text-align: center;
     }
 
+    .gate {
+      background: linear-gradient(135deg, rgba(137, 54, 84, 0.1), rgba(137, 54, 84, 0.04));
+      border: 2px solid rgba(137, 54, 84, 0.22);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-top: 18px;
+    }
+
+    .gate h3 {
+      color: var(--berry);
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .gate p,
+    .gate li {
+      color: var(--ink);
+      line-height: 1.8;
+    }
+
+    .gate ul {
+      padding-left: 1.4em;
+      margin: 8px 0 0;
+    }
+
     .table-wrap {
       overflow-x: auto;
       margin: 12px 0;
@@ -262,6 +288,31 @@
       margin-left: 8px;
     }
 
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      justify-content: center;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), #15958f);
+    }
+
+    .button.secondary {
+      color: var(--teal);
+      background: rgba(15, 123, 118, 0.1);
+    }
+
     @media (max-width: 600px) {
       .page { padding: 12px 0 40px; }
       .hero, .step { padding: 20px 16px; }
@@ -276,7 +327,37 @@
   <div class="hero">
     <span class="eyebrow">學生講義</span>
     <h1>Claude Code 安裝講義</h1>
-    <p>照著做，25 分鐘裝好，讓 AI 陪你練程式。</p>
+    <p>這一頁是進階與教師學習頁，適合已有程式與終端機基礎的人使用，不建議一般國中學生把它當作起點。</p>
+    <div class="button-row">
+      <a class="button" href="index.html">回首頁</a>
+    </div>
+  </div>
+
+  <div class="gate">
+    <h3>適合誰先看</h3>
+    <ul>
+      <li>老師想先自己安裝，了解 AI 程式助手怎麼用。</li>
+      <li>已經有 APCS 基礎，且不怕終端機操作的進階學生。</li>
+      <li>已經穩定使用 Obsidian 與 AI 對話一段時間，想往開發工具前進的人。</li>
+    </ul>
+  </div>
+
+  <div class="gate">
+    <h3>不建議誰現在就開始</h3>
+    <ul>
+      <li>完全沒接觸過終端機、WSL、Node.js 的一般學生。</li>
+      <li>還在建立筆記習慣與基本 AI 對話能力的學生。</li>
+      <li>目前只需要 AI 幫忙理解課業內容的人。</li>
+    </ul>
+  </div>
+
+  <div class="gate">
+    <h3>建議先完成的基礎</h3>
+    <ul>
+      <li>先完成 Obsidian 主線與 AI 對話主線。</li>
+      <li>先會用聊天式 AI 做解釋、出題、檢查、提示。</li>
+      <li>再來學 Claude Code，才比較像加速，不會變成額外負擔。</li>
+    </ul>
   </div>
 
   <div class="toc">

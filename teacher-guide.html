@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>教師帶領指南</title>
+  <meta name="description" content="教師如何帶學生使用學生自學網站的內部指引頁。包含導入順序、兩類學生分流、常見卡點與進階工具使用時機。">
+  <style>
+    :root {
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --teal: #0f7b76;
+      --amber: #df8f36;
+      --berry: #893654;
+      --line: rgba(31, 47, 57, 0.12);
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
+        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+    }
+
+    .page {
+      width: min(980px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+
+    .hero,
+    .section {
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 240, 0.84)),
+        linear-gradient(135deg, rgba(223, 143, 54, 0.12), rgba(15, 123, 118, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin-top: 18px;
+    }
+
+    .hero { margin-top: 0; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(31, 47, 57, 0.07);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--amber), var(--berry));
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    h2 { margin: 0; font-size: 1.24rem; }
+    h3 { margin: 16px 0 8px; font-size: 1.02rem; }
+    p { margin: 0 0 12px; color: var(--muted); }
+
+    .toc {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-top: 18px;
+    }
+
+    .toc ol,
+    .section ol,
+    .section ul { padding-left: 1.3em; margin: 10px 0; }
+
+    .toc li,
+    .section li { margin: 6px 0; }
+
+    .toc a { text-decoration: none; color: var(--teal); font-weight: 700; }
+
+    .step-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .step-num {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--teal), #0fa19a);
+      color: #fff;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .note,
+    .warn,
+    .good,
+    .plan {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin: 14px 0;
+      color: var(--ink);
+    }
+
+    .note {
+      background: rgba(15, 123, 118, 0.08);
+      border-left: 4px solid var(--teal);
+    }
+
+    .warn {
+      background: rgba(223, 143, 54, 0.12);
+      border-left: 4px solid var(--amber);
+    }
+
+    .good {
+      background: rgba(137, 54, 84, 0.08);
+      border-left: 4px solid var(--berry);
+    }
+
+    .plan {
+      background: rgba(31, 47, 57, 0.05);
+      border-left: 4px solid rgba(31, 47, 57, 0.22);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin-top: 16px;
+    }
+
+    .card {
+      background: rgba(255, 251, 246, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .card strong { display: block; margin-bottom: 8px; color: var(--ink); }
+
+    .code {
+      background: #1e2030;
+      color: #d8e3ff;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin: 12px 0;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--teal), #15958f);
+    }
+
+    .button.secondary {
+      color: var(--teal);
+      background: rgba(15, 123, 118, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.94rem;
+      background: rgba(255, 255, 255, 0.92);
+      overflow: hidden;
+      border-radius: var(--radius-md);
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: rgba(31, 47, 57, 0.05); }
+
+    @media (max-width: 640px) {
+      .page { padding: 12px 0 40px; }
+      .hero, .section { padding: 20px 16px; }
+      .code { font-size: 0.82rem; padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <span class="eyebrow">教師使用</span>
+    <h1>教師帶領指南</h1>
+    <p>這一頁是給教師或帶學生的人使用，不放在學生首頁中。目的不是讓學生自己摸索全部內容，而是幫你決定：先發什麼、後發什麼、哪一類學生適合哪條路、什麼時候該擋下進階工具。</p>
+    <div class="button-row">
+      <a class="button" href="index.html">回首頁</a>
+    </div>
+    <div class="warn"><strong>提醒：</strong>這一頁不提供學生首頁入口，但網址仍然可以直接開啟。適合放在教師自己的收藏或備忘中使用。</div>
+  </div>
+
+  <div class="toc">
+    <strong>目錄</strong>
+    <ol>
+      <li><a href="#goal">網站的教學目標</a></li>
+      <li><a href="#order">建議發放順序</a></li>
+      <li><a href="#split">兩類學生怎麼分流</a></li>
+      <li><a href="#month">第 1 個月怎麼帶</a></li>
+      <li><a href="#mistakes">常見錯誤與處理方式</a></li>
+      <li><a href="#tools">什麼時候不要讓學生碰進階工具</a></li>
+      <li><a href="#teacher-use">教師自己可以怎麼用</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="goal">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <h2>網站的教學目標</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <strong>先建立學習系統</strong>
+        <p>讓學生先會記每日紀錄、單元重點、錯題整理，而不是先玩進階工具。</p>
+      </div>
+      <div class="card">
+        <strong>再建立 AI 使用能力</strong>
+        <p>讓學生學會問 AI 解釋、出題、檢查、提示，而不是只會拿答案。</p>
+      </div>
+      <div class="card">
+        <strong>最後才工具升級</strong>
+        <p>只有在學生已經穩定使用前兩者之後，才考慮進階工具如 Gemini CLI 或 Claude Code。</p>
+      </div>
+    </div>
+    <div class="note"><strong>核心原則：</strong>這個網站不是在教工具，而是在教「怎麼學」。工具只是為了讓學習能持續、能回顧、能深化。</div>
+  </div>
+
+  <div class="section" id="order">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <h2>建議發放順序</h2>
+    </div>
+    <table>
+      <tr>
+        <th>階段</th>
+        <th>先發哪些頁</th>
+        <th>目的</th>
+      </tr>
+      <tr>
+        <td>第 1 階段</td>
+        <td>`Obsidian 入門`、`學生筆記模板`、`第一個月路線圖`</td>
+        <td>先讓學生建立可持續的筆記習慣。</td>
+      </tr>
+      <tr>
+        <td>第 2 階段</td>
+        <td>`AI 對話入門講義`、`提問模板與練習單`</td>
+        <td>讓學生把 AI 用成家教與陪練，而不是答案機器。</td>
+      </tr>
+      <tr>
+        <td>第 3 階段</td>
+        <td>`一般資優生路線` 或 `APCS 較強學生路線`</td>
+        <td>依學生差異調整節奏與目標。</td>
+      </tr>
+      <tr>
+        <td>最後</td>
+        <td>`Gemini CLI`、`Claude Code`</td>
+        <td>只給進階學生或教師，當成延伸學習。</td>
+      </tr>
+    </table>
+    <div class="warn"><strong>不建議：</strong>一開始就把整個網站所有頁面全部丟給學生。那通常只會讓學生失焦。</div>
+  </div>
+
+  <div class="section" id="split">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <h2>兩類學生怎麼分流</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <strong>一般資優生</strong>
+        <p>學科能力強，但對電腦工具接觸少。先走 Obsidian 主線，再走 AI 對話主線，不急著碰 CLI。</p>
+      </div>
+      <div class="card">
+        <strong>APCS 較強學生</strong>
+        <p>已有程式自學能力。可以加快進入題解紀錄、debug 紀錄與 AI 陪練，但仍不建議一開始就碰進階工具整合。</p>
+      </div>
+    </div>
+    <div class="good"><strong>實務判斷方式：</strong>如果學生還會問「這個檔案放哪裡」「這篇筆記要怎麼開始寫」，就還不適合碰 Gemini CLI 或 Claude Code。</div>
+  </div>
+
+  <div class="section" id="month">
+    <div class="step-head">
+      <div class="step-num">4</div>
+      <h2>第 1 個月怎麼帶</h2>
+    </div>
+    <div class="plan">
+      <strong>第 1 週：</strong>只要求每天一篇 `每日紀錄`。不要追求漂亮，重點是養成打開與記錄的習慣。
+    </div>
+    <div class="plan">
+      <strong>第 2 週：</strong>開始每科至少整理 1 篇 `單元筆記`。讓學生理解筆記不是抄課本，而是整理自己的理解。
+    </div>
+    <div class="plan">
+      <strong>第 3 週：</strong>加入 `錯題整理`。學生開始知道自己卡在哪裡，而不是只看答案。
+    </div>
+    <div class="plan">
+      <strong>第 4 週：</strong>再導入 `AI 對話入門`。這時學生已經有內容可以拿來問 AI、請 AI 檢查與出題。
+    </div>
+    <div class="note"><strong>教師帶法建議：</strong>每週不要加太多新要求。國中生真正會持續的，通常是很短、很明確、能完成的小任務。</div>
+  </div>
+
+  <div class="section" id="mistakes">
+    <div class="step-head">
+      <div class="step-num">5</div>
+      <h2>常見錯誤與處理方式</h2>
+    </div>
+    <ul>
+      <li>學生把筆記寫成抄課本：請他加上「我還不懂的地方」或「下次怎麼避免」。</li>
+      <li>學生只會叫 AI 直接給答案：要求他改成「請提示我下一步」或「先幫我檢查我的想法」。</li>
+      <li>學生覺得 Obsidian 很麻煩：先只要求每日紀錄，不要一次要求所有功能。</li>
+      <li>學生看到進階工具就想裝：先確認他是否已穩定使用主線內容至少 2 到 4 週。</li>
+    </ul>
+    <div class="warn"><strong>最常見的失敗原因：</strong>不是學生不會，而是老師一次給太多系統、太多要求、太多工具。</div>
+  </div>
+
+  <div class="section" id="tools">
+    <div class="step-head">
+      <div class="step-num">6</div>
+      <h2>什麼時候不要讓學生碰進階工具</h2>
+    </div>
+    <ul>
+      <li>還不會自己建立與整理筆記時。</li>
+      <li>還不會跟 AI 有效對話時。</li>
+      <li>目前只是要用 AI 協助理解課業內容時。</li>
+      <li>學生容易被工具吸走注意力、忽略學習內容時。</li>
+    </ul>
+    <div class="good"><strong>先修標準：</strong>學生能穩定寫每日紀錄、單元筆記、錯題整理，並會用 AI 做解釋、出題、檢查、提示，才考慮進階工具。</div>
+  </div>
+
+  <div class="section" id="teacher-use">
+    <div class="step-head">
+      <div class="step-num">7</div>
+      <h2>教師自己可以怎麼用</h2>
+    </div>
+    <ul>
+      <li>先自己完整走一次學生主線，知道學生會在哪裡卡住。</li>
+      <li>上課時只發當週要用到的頁面，不要一次全發。</li>
+      <li>把教師頁當成帶領備忘，而不是直接給學生看。</li>
+      <li>如果要導入 Gemini CLI 或 Claude Code，先由教師自己實測，再決定是否開放進階學生。</li>
+    </ul>
+    <div class="code">推薦給學生的最小順序：
+1. Obsidian 入門
+2. 學生筆記模板
+3. 第一個月路線圖
+4. AI 對話入門
+5. 提問模板與練習單
+6. 依學生分流
+7. 最後才看進階選修</div>
+  </div>
+</div>
+</body>
+</html>
