@@ -1,642 +1,662 @@
-<!doctype html>
-<html lang="zh-Hant">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Claude Code 安裝講義</title>
-  <meta name="description" content="給老師與進階學生的 Claude Code 安裝講義。適合已有程式與終端機基礎者，不建議一般國中學生作為起點。">
-  <style>
-    :root {
-      --bg: #f7efe3;
-      --surface: rgba(255, 251, 246, 0.88);
-      --surface-strong: rgba(255, 255, 255, 0.94);
-      --ink: #1f2f39;
-      --muted: #60707a;
-      --line: rgba(31, 47, 57, 0.12);
-      --teal: #0f7b76;
-      --amber: #df8f36;
-      --berry: #893654;
-      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
-      --radius-xl: 30px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 入門教學</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --border: #e8e4dc;
+    --accent: #185FA5;
+    --accent-light: #E6F1FB;
+    --accent-text: #0C447C;
+    --success: #3B6D11;
+    --success-light: #EAF3DE;
+    --success-text: #27500A;
+    --warn: #854F0B;
+    --warn-light: #FAEEDA;
+    --warn-text: #633806;
+    --danger: #A32D2D;
+    --danger-light: #FCEBEB;
+    --danger-text: #791F1F;
+    --text: #2C2C2A;
+    --text-muted: #5F5E5A;
+    --text-hint: #888780;
+    --code-bg: #F1EFE8;
+    --radius: 10px;
+  }
 
-    * { box-sizing: border-box; margin: 0; }
-    body {
-      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at top left, rgba(223, 143, 54, 0.22), transparent 24rem),
-        radial-gradient(circle at top right, rgba(15, 123, 118, 0.18), transparent 24rem),
-        linear-gradient(180deg, #f7f1e6 0%, #fff9f2 48%, #f1ebe1 100%);
-      min-height: 100vh;
-      line-height: 1.7;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .page {
-      width: min(780px, calc(100% - 24px));
-      margin: 0 auto;
-      padding: 20px 0 60px;
-    }
+  body {
+    font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.75;
+  }
 
-    .hero {
-      background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 249, 240, 0.82)),
-        linear-gradient(135deg, rgba(223, 143, 54, 0.14), rgba(15, 123, 118, 0.12));
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius-xl);
-      backdrop-filter: blur(12px);
-      padding: 28px 24px;
-      text-align: center;
-    }
+  .hero {
+    background: linear-gradient(135deg, #042C53 0%, #185FA5 60%, #378ADD 100%);
+    color: white;
+    padding: 3.5rem 2rem 2.5rem;
+    text-align: center;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 13px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .hero p {
+    font-size: 1rem;
+    opacity: 0.85;
+    max-width: 520px;
+    margin: 0 auto;
+  }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 16px;
-      border-radius: 999px;
-      background: rgba(31, 47, 57, 0.07);
-      font-weight: 800;
-      font-size: 0.9rem;
-    }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
 
-    .eyebrow::before {
-      content: "";
-      width: 10px; height: 10px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--amber), var(--berry));
-    }
+  /* Section */
+  .section {
+    margin-bottom: 2.5rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .step-num {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
 
-    h1 {
-      margin: 14px 0 8px;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-    }
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
 
-    .hero p { color: var(--muted); font-size: 1rem; }
+  /* Alert boxes */
+  .alert {
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+  .alert-info { background: var(--accent-light); border-left: 3px solid var(--accent); }
+  .alert-info p, .alert-info li { color: var(--accent-text); }
+  .alert-success { background: var(--success-light); border-left: 3px solid var(--success); }
+  .alert-success p, .alert-success li { color: var(--success-text); }
+  .alert-warn { background: var(--warn-light); border-left: 3px solid var(--warn); }
+  .alert-warn p, .alert-warn li { color: var(--warn-text); }
+  .alert-danger { background: var(--danger-light); border-left: 3px solid var(--danger); }
+  .alert-danger p, .alert-danger li { color: var(--danger-text); }
+  .alert strong { display: block; margin-bottom: 0.3rem; }
+  .alert ul { padding-left: 1.2em; margin-top: 0.25rem; }
+  .alert li { font-size: 0.9rem; }
 
-    .step {
-      background: var(--surface);
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius-xl);
-      backdrop-filter: blur(12px);
-      margin-top: 18px;
-      padding: 24px;
-    }
+  /* Code blocks */
+  .code-block {
+    background: #1e2230;
+    color: #e2e8f0;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0.75rem 0;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block .comment { color: #64748b; }
+  .code-block .cmd { color: #7dd3fc; }
+  .code-block .str { color: #86efac; }
+  .code-block .key { color: #f9a8d4; }
 
-    .step-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
+  .copy-hint {
+    position: absolute;
+    top: 8px; right: 12px;
+    font-size: 11px;
+    color: #64748b;
+    font-family: sans-serif;
+  }
 
-    .step-num {
-      flex-shrink: 0;
-      width: 44px; height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--teal), #0fa19a);
-      color: #fff;
-      font-weight: 900;
-      font-size: 1.2rem;
-    }
+  /* Steps list */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+  }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    width: 24px; height: 24px;
+    background: var(--accent-light);
+    color: var(--accent-text);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .steps li .step-content { flex: 1; }
+  .steps li .step-label { font-weight: 600; margin-bottom: 0.25rem; }
+  .steps li p { font-size: 0.95rem; color: var(--text-muted); }
 
-    .step-header h2 {
-      font-size: 1.15rem;
-      line-height: 1.3;
-    }
+  /* Inline code */
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.875em;
+    color: var(--accent-text);
+  }
 
-    .step p, .step li { color: var(--ink); line-height: 1.8; }
-    .step ul, .step ol { padding-left: 1.4em; margin: 8px 0; }
-    .step li { margin: 4px 0; }
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 0.75rem 0;
+  }
+  th {
+    background: var(--code-bg);
+    text-align: left;
+    padding: 8px 12px;
+    font-weight: 600;
+    border-bottom: 1.5px solid var(--border);
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  tr:last-child td { border-bottom: none; }
 
-    .what {
-      background: rgba(15, 123, 118, 0.06);
-      border-radius: var(--radius-md);
-      padding: 10px 16px;
-      margin-bottom: 12px;
-      font-weight: 700;
-      color: var(--teal);
-    }
+  /* Check list */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 0.95rem;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .icon { font-size: 1rem; flex-shrink: 0; }
+  .checklist .desc { color: var(--text-muted); font-size: 0.88rem; }
 
-    .code-block {
-      background: #1e2030;
-      color: #c8d3f5;
-      border-radius: var(--radius-md);
-      padding: 16px 18px;
-      margin: 12px 0;
-      font-family: "Cascadia Code", "Fira Code", monospace;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-      position: relative;
-    }
+  /* Two-col grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
 
-    .code-block .comment { color: #636da6; }
-    .code-block .highlight { color: #c3e88d; }
-    .code-block .keyword { color: #ffc777; }
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-hint);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
 
-    .code-label {
-      position: absolute;
-      top: 8px; right: 12px;
-      font-size: 0.75rem;
-      color: #636da6;
-      font-weight: 700;
-    }
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tag-new { background: var(--success-light); color: var(--success-text); }
+  .tag-dep { background: var(--danger-light); color: var(--danger-text); }
+  .tag-opt { background: var(--warn-light); color: var(--warn-text); }
 
-    .tip {
-      background: rgba(15, 123, 118, 0.08);
-      border-left: 4px solid var(--teal);
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
-      padding: 14px 18px;
-      margin: 14px 0;
-      font-size: 0.95rem;
-    }
-
-    .tip strong { color: var(--teal); }
-
-    .warning {
-      background: rgba(223, 143, 54, 0.1);
-      border-left: 4px solid var(--amber);
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
-      padding: 14px 18px;
-      margin: 14px 0;
-      font-size: 0.95rem;
-    }
-
-    .warning strong { color: #8a5615; }
-
-    .checkpoint {
-      background: linear-gradient(135deg, rgba(15, 123, 118, 0.12), rgba(15, 123, 118, 0.06));
-      border: 2px solid rgba(15, 123, 118, 0.3);
-      border-radius: var(--radius-md);
-      padding: 14px 18px;
-      margin: 14px 0;
-      font-weight: 700;
-      color: var(--teal);
-      text-align: center;
-    }
-
-    .gate {
-      background: linear-gradient(135deg, rgba(137, 54, 84, 0.1), rgba(137, 54, 84, 0.04));
-      border: 2px solid rgba(137, 54, 84, 0.22);
-      border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      margin-top: 18px;
-    }
-
-    .gate h3 {
-      color: var(--berry);
-      margin-bottom: 8px;
-      font-size: 1rem;
-    }
-
-    .gate p,
-    .gate li {
-      color: var(--ink);
-      line-height: 1.8;
-    }
-
-    .gate ul {
-      padding-left: 1.4em;
-      margin: 8px 0 0;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      margin: 12px 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.92rem;
-    }
-
-    th, td {
-      padding: 10px 14px;
-      border: 1px solid var(--line);
-      text-align: left;
-    }
-
-    th {
-      background: rgba(31, 47, 57, 0.05);
-      font-weight: 800;
-    }
-
-    kbd {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 6px;
-      background: #e8e0d4;
-      border: 1px solid #ccc3b5;
-      font-family: inherit;
-      font-size: 0.88em;
-      font-weight: 700;
-    }
-
-    .diagram {
-      background: var(--surface-strong);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      margin: 12px 0;
-      font-family: "Cascadia Code", monospace;
-      font-size: 0.85rem;
-      line-height: 1.5;
-      overflow-x: auto;
-      white-space: pre;
-      text-align: center;
-    }
-
-    .toc {
-      background: var(--surface-strong);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      padding: 18px 22px;
-      margin: 18px 0;
-    }
-
-    .toc h3 { margin-bottom: 10px; font-size: 1rem; }
-    .toc a {
-      color: var(--teal);
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .toc a:hover { text-decoration: underline; }
-    .toc ol { padding-left: 1.4em; }
-    .toc li { margin: 6px 0; }
-
-    .time-est {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 999px;
-      background: rgba(137, 54, 84, 0.1);
-      color: var(--berry);
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-left: 8px;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-      justify-content: center;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 11px 16px;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: 800;
-      color: #fff;
-      background: linear-gradient(135deg, var(--teal), #15958f);
-    }
-
-    .button.secondary {
-      color: var(--teal);
-      background: rgba(15, 123, 118, 0.1);
-    }
-
-    @media (max-width: 600px) {
-      .page { padding: 12px 0 40px; }
-      .hero, .step { padding: 20px 16px; }
-      .code-block { font-size: 0.82rem; padding: 12px 14px; }
-      .diagram { font-size: 0.75rem; }
-    }
-  </style>
+  h3 { font-size: 1rem; font-weight: 700; margin: 1rem 0 0.5rem; color: var(--text); }
+  p { margin-bottom: 0.5rem; }
+  ul { padding-left: 1.4em; }
+  li { margin-bottom: 0.25rem; }
+</style>
 </head>
 <body>
-<div class="page">
 
-  <div class="hero">
-    <span class="eyebrow">學生講義</span>
-    <h1>Claude Code 安裝講義</h1>
-    <p>這一頁是進階與教師學習頁，適合已有程式與終端機基礎的人使用，不建議一般國中學生把它當作起點。</p>
-    <div class="button-row">
-      <a class="button" href="index.html">回首頁</a>
+<div class="hero">
+  <div class="badge">2026 改版 · 適用 Windows 10/11</div>
+  <h1>Claude Code 入門教學</h1>
+  <p>使用老師提供的 API Key 在 Windows 上安裝並開始使用 Claude Code</p>
+</div>
+
+<div class="container">
+
+  <!-- 說明區 -->
+  <div class="section" style="margin-top:1.5rem;">
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ</span>
+      <div>
+        <strong>本講義重點</strong>
+        <p>Claude Code 在 2025 年底推出原生 Windows 版，<strong>不再需要安裝 WSL</strong>。本講義採用「老師提供 API Key」的方式，讓你用老師的帳號額度連接 Claude，不需要自己註冊付費帳號。</p>
+      </div>
+    </div>
+    <div class="alert alert-danger">
+      <span class="alert-icon">⚠</span>
+      <div>
+        <strong>API Key 使用守則（請務必遵守）</strong>
+        <ul>
+          <li>API Key 是老師的費用，每次使用都要計費，請勿浪費</li>
+          <li>不可將 API Key 分享給班級以外的人</li>
+          <li>不可用於與上課無關的用途（打遊戲、寫作業以外的事）</li>
+          <li>違規者將立即停止 API Key 使用權限</li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <div class="gate">
-    <h3>適合誰先看</h3>
-    <ul>
-      <li>老師想先自己安裝，了解 AI 程式助手怎麼用。</li>
-      <li>已經有 APCS 基礎，且不怕終端機操作的進階學生。</li>
-      <li>已經穩定使用 Obsidian 與 AI 對話一段時間，想往開發工具前進的人。</li>
-    </ul>
-  </div>
-
-  <div class="gate">
-    <h3>不建議誰現在就開始</h3>
-    <ul>
-      <li>完全沒接觸過終端機、WSL、Node.js 的一般學生。</li>
-      <li>還在建立筆記習慣與基本 AI 對話能力的學生。</li>
-      <li>目前只需要 AI 幫忙理解課業內容的人。</li>
-    </ul>
-  </div>
-
-  <div class="gate">
-    <h3>建議先完成的基礎</h3>
-    <ul>
-      <li>先完成 Obsidian 主線與 AI 對話主線。</li>
-      <li>先會用聊天式 AI 做解釋、出題、檢查、提示。</li>
-      <li>再來學 Claude Code，才比較像加速，不會變成額外負擔。</li>
-    </ul>
-  </div>
-
-  <div class="toc">
-    <h3>目錄</h3>
-    <ol>
-      <li><a href="#prereq">事前確認</a></li>
-      <li><a href="#step0">開啟 PowerShell（系統管理員）</a></li>
-      <li><a href="#step1">安裝 WSL</a></li>
-      <li><a href="#step2">設定 Linux 帳號密碼</a></li>
-      <li><a href="#step3">更新系統</a></li>
-      <li><a href="#step4">安裝 Node.js</a></li>
-      <li><a href="#step5">安裝 Claude Code</a></li>
-      <li><a href="#step6">註冊 Anthropic 帳號</a></li>
-      <li><a href="#step7">第一次啟動</a></li>
-      <li><a href="#step8">試用看看！</a></li>
-      <li><a href="#step9">在 VS Code 裡使用</a></li>
-      <li><a href="#daily">每次使用</a></li>
-      <li><a href="#apcs">APCS 練習建議</a></li>
-      <li><a href="#troubleshoot">錯誤急救表</a></li>
-    </ol>
-  </div>
-
-  <!-- 事前確認 -->
-  <div class="step" id="prereq">
-    <div class="step-header">
-      <div class="step-num">?</div>
-      <h2>事前確認</h2>
-    </div>
-    <p>你的電腦需要是 <strong>Windows 10（版本 2004 以上）</strong> 或 <strong>Windows 11</strong>。</p>
-    <p><strong>怎麼檢查版本：</strong></p>
-    <ol>
-      <li>按鍵盤 <kbd>Win</kbd> + <kbd>R</kbd>（Win 就是那個 Windows 旗幟鍵）</li>
-      <li>輸入 <code>winver</code>，按 Enter</li>
-      <li>看到版本號 ≥ 2004 就可以</li>
-    </ol>
-    <div class="warning"><strong>版本太舊？</strong>先去 Windows Update 更新系統。</div>
-  </div>
-
-  <!-- 步驟 0 -->
-  <div class="step" id="step0">
-    <div class="step-header">
-      <div class="step-num">0</div>
-      <h2>開啟 PowerShell（系統管理員）</h2>
-    </div>
-    <div class="what">你在做什麼：用管理員權限開啟命令列</div>
-    <ol>
-      <li>點左下角「開始」按鈕，搜尋 <code>PowerShell</code></li>
-      <li>對「Windows PowerShell」<strong>按右鍵</strong></li>
-      <li>選「<strong>以系統管理員身分執行</strong>」</li>
-      <li>如果跳出詢問視窗，點「是」</li>
-    </ol>
-    <div class="checkpoint">確認：視窗最上方標題列有「系統管理員」字樣。</div>
-  </div>
-
-  <!-- 步驟 1 -->
-  <div class="step" id="step1">
-    <div class="step-header">
+  <!-- STEP 1: 前置確認 -->
+  <div class="section">
+    <div class="section-header">
       <div class="step-num">1</div>
-      <h2>安裝 WSL</h2>
+      <h2>前置確認：你需要準備什麼</h2>
     </div>
-    <div class="what">你在做什麼：安裝 Linux 子系統</div>
-    <p>在 PowerShell 視窗中貼上：</p>
-    <div class="code-block"><span class="code-label">PowerShell</span>wsl --install -d Ubuntu</div>
-    <p>按 Enter，等它跑完。</p>
-    <div class="checkpoint">確認：看到「已成功安裝發佈」或 "The requested operation is successful"。</div>
-    <div class="warning"><strong>接下來要重開機。</strong>存好你正在做的事，然後重新啟動電腦。</div>
+    <div class="card">
+      <ul class="checklist">
+        <li>
+          <span class="icon">💻</span>
+          <div>
+            <div><strong>Windows 10 或 Windows 11</strong></div>
+            <div class="desc">兩者均可，不需要特定版本</div>
+          </div>
+        </li>
+        <li>
+          <span class="icon">🔑</span>
+          <div>
+            <div><strong>老師提供的 Anthropic API Key</strong></div>
+            <div class="desc">格式為 <code>sk-ant-api03-...</code>，上課前向老師索取</div>
+          </div>
+        </li>
+        <li>
+          <span class="icon">🌐</span>
+          <div>
+            <div><strong>網路連線</strong></div>
+            <div class="desc">安裝過程需要下載軟體；使用時每次都需要連網</div>
+          </div>
+        </li>
+        <li>
+          <span class="icon">❌</span>
+          <div>
+            <div><strong>不需要：WSL（Linux 子系統）</strong> <span class="tag tag-new">2025 更新</span></div>
+            <div class="desc">舊版需要 WSL，現在已不需要，直接在 PowerShell 安裝即可</div>
+          </div>
+        </li>
+        <li>
+          <span class="icon">❌</span>
+          <div>
+            <div><strong>不需要：Node.js</strong> <span class="tag tag-new">2026 更新</span></div>
+            <div class="desc">新版原生安裝器不需要 Node.js，之前的 npm 安裝方式已廢棄</div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <!-- 步驟 2 -->
-  <div class="step" id="step2">
-    <div class="step-header">
+  <!-- STEP 2: 安裝 Git -->
+  <div class="section">
+    <div class="section-header">
       <div class="step-num">2</div>
-      <h2>設定 Linux 帳號密碼</h2>
+      <h2>安裝 Git for Windows（必要）</h2>
     </div>
-    <div class="what">你在做什麼：建立你的 Linux 使用者</div>
-    <p>重開機後，Ubuntu 視窗會自動跳出來（如果沒有，從開始選單找「Ubuntu」打開）。</p>
-    <ol>
-      <li>它會問你 <code>Enter new UNIX username:</code>，輸入一個<strong>英文小寫</strong>的帳號名（例如你的名字拼音）</li>
-      <li>它會問你 <code>New password:</code>，輸入一個你記得住的密碼</li>
-      <li>它會要你再輸入一次密碼確認</li>
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠</span>
+      <div>
+        <p>Claude Code 內部需要 Git Bash 才能運作，即使你不使用 Git 也必須安裝。若跳過此步驟，Claude Code 會無法正常執行。</p>
+      </div>
+    </div>
+    <ol class="steps">
+      <li>
+        <div class="step-content">
+          <div class="step-label">開啟瀏覽器，前往 Git 官方網站</div>
+          <p>網址：<code>https://git-scm.com/downloads/win</code></p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">下載 64-bit Git for Windows</div>
+          <p>點選「64-bit Git for Windows Setup」下載安裝檔</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">執行安裝，全部使用預設值</div>
+          <p>一路按 Next，不需要更改任何選項。確認「Add Git to PATH」有勾選（預設已勾）。</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">安裝完成後重開 PowerShell</div>
+          <p>舊的 PowerShell 視窗不會生效，必須關閉後重新開啟。</p>
+        </div>
+      </li>
     </ol>
-    <div class="warning">
-      <strong>密碼打字時螢幕完全不會顯示任何字元</strong>，沒有星號、沒有圓點，什麼都沒有。這是正常的！不是鍵盤壞了。照打就好，打完按 Enter。
+    <div class="alert alert-success">
+      <span class="alert-icon">✓</span>
+      <div><p>驗證安裝：在 PowerShell 輸入 <code>git --version</code>，若出現版本號代表安裝成功。</p></div>
     </div>
-    <div class="checkpoint">確認：看到 <code>$</code> 符號的提示字元，像這樣：<br><code>yourname@DESKTOP-XXXX:~$</code></div>
   </div>
 
-  <!-- 步驟 3 -->
-  <div class="step" id="step3">
-    <div class="step-header">
+  <!-- STEP 3: 安裝 Claude Code -->
+  <div class="section">
+    <div class="section-header">
       <div class="step-num">3</div>
-      <h2>更新系統</h2>
+      <h2>安裝 Claude Code（原生安裝器）</h2>
     </div>
-    <div class="what">你在做什麼：把 Linux 系統更新到最新</div>
-    <p>在 Ubuntu 視窗中貼上：</p>
-    <div class="code-block"><span class="code-label">Ubuntu</span>sudo apt update && sudo apt upgrade -y</div>
-    <p>它會要你輸入<strong>步驟 2 設的密碼</strong>（一樣打字不會顯示，照打按 Enter）。</p>
-    <p>等它跑完，大概 1-3 分鐘。</p>
-    <div class="checkpoint">確認：跑完後最後幾行沒有出現 error，回到 <code>$</code> 提示字元。</div>
-  </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">方法 A：PowerShell 安裝 <span class="tag tag-new">官方推薦</span></div>
+        <p style="font-size:0.9rem;color:var(--text-muted);">最簡單，自動更新，不需要管理員權限</p>
+      </div>
+      <div class="card">
+        <div class="card-title">方法 B：WinGet 安裝 <span class="tag tag-opt">可選</span></div>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Windows 11 內建，需手動更新</p>
+      </div>
+    </div>
 
-  <!-- 步驟 4 -->
-  <div class="step" id="step4">
-    <div class="step-header">
-      <div class="step-num">4</div>
-      <h2>安裝 Node.js</h2>
-    </div>
-    <div class="what">你在做什麼：安裝 Claude Code 需要的執行環境</div>
-    <div class="warning">
-      <strong>不要用 <code>sudo apt install nodejs</code>！</strong>那個版本太舊，Claude Code 會裝不起來。請照下面的方式安裝。
-    </div>
-    <p><strong>動作 4-1：</strong>先加入 Node.js 官方套件來源：</p>
-    <div class="code-block"><span class="code-label">Ubuntu</span>curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -</div>
-    <p><strong>動作 4-2：</strong>安裝 Node.js：</p>
-    <div class="code-block"><span class="code-label">Ubuntu</span>sudo apt install -y nodejs</div>
-    <p><strong>確認：</strong>檢查版本：</p>
-    <div class="code-block"><span class="code-label">Ubuntu</span>node --version</div>
-    <div class="checkpoint">確認：應該顯示 <code>v20.x.x</code> 或更高。Node.js 裝好了，剩兩步就完成。</div>
-  </div>
-
-  <!-- 步驟 5 -->
-  <div class="step" id="step5">
-    <div class="step-header">
-      <div class="step-num">5</div>
-      <h2>安裝 Claude Code</h2>
-    </div>
-    <div class="what">你在做什麼：安裝 AI 程式助手</div>
-    <div class="code-block"><span class="code-label">Ubuntu</span>npm install -g @anthropic-ai/claude-code</div>
-    <p>等它跑完，大概 1-2 分鐘。</p>
-    <p><strong>確認：</strong></p>
-    <div class="code-block"><span class="code-label">Ubuntu</span>claude --version</div>
-    <div class="checkpoint">確認：顯示版本號，例如 <code>1.x.x</code>。</div>
-  </div>
-
-  <!-- 步驟 6 -->
-  <div class="step" id="step6">
-    <div class="step-header">
-      <div class="step-num">6</div>
-      <h2>註冊 Anthropic 帳號</h2>
-    </div>
-    <div class="what">你在做什麼：取得 AI 的使用權限</div>
-    <ol>
-      <li>打開瀏覽器，進入 <strong>console.anthropic.com</strong></li>
-      <li>點 <strong>Sign up</strong> 註冊帳號（可以用 Google 帳號直接登入）</li>
-      <li>照畫面指示完成註冊</li>
+    <h3>方法 A：PowerShell 安裝（推薦）</h3>
+    <ol class="steps">
+      <li>
+        <div class="step-content">
+          <div class="step-label">以一般使用者身分開啟 PowerShell</div>
+          <p>按 Win 鍵 → 搜尋「PowerShell」→ 直接開啟（不需要以系統管理員執行）</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">輸入以下安裝指令並按 Enter</div>
+          <div class="code-block">
+            <span class="copy-hint">複製貼上</span>
+            <span class="cmd">irm https://claude.ai/install.ps1 | iex</span>
+          </div>
+          <p>等待下載並安裝完成（約 1–2 分鐘）</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">關閉 PowerShell，重新開啟</div>
+          <p>PATH 設定需要新視窗才會生效</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">驗證安裝</div>
+          <div class="code-block"><span class="cmd">claude --version</span></div>
+          <p>看到版本號（例如 <code>2.1.xx (Claude Code)</code>）代表安裝成功</p>
+        </div>
+      </li>
     </ol>
-    <div class="checkpoint">確認：能登入 console.anthropic.com 的主畫面。</div>
-    <div class="tip"><strong>好消息：</strong>新帳號有 $5 美元免費額度，正常使用夠用好幾個月。</div>
+
+    <h3>方法 B：WinGet 安裝（備用）</h3>
+    <div class="code-block">
+      <span class="comment"># Windows 11 / Windows 10 22H2+ 適用</span><br>
+      <span class="cmd">winget install Anthropic.ClaudeCode</span>
+    </div>
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠</span>
+      <div><p>WinGet 安裝後<strong>不會自動更新</strong>，需定期手動執行 <code>winget upgrade Anthropic.ClaudeCode</code>。</p></div>
+    </div>
   </div>
 
-  <!-- 步驟 7 -->
-  <div class="step" id="step7">
-    <div class="step-header">
-      <div class="step-num">7</div>
+  <!-- STEP 4: 設定 API Key -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">4</div>
+      <h2>設定 API Key（最重要的步驟）</h2>
+    </div>
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ</span>
+      <div>
+        <strong>為什麼用 API Key 而非登入帳號？</strong>
+        <p>老師提供 API Key 讓同學使用，不需要每個人自己購買 Claude 訂閱。設定環境變數後，Claude Code 會自動使用 API Key 連接，不需要瀏覽器登入。</p>
+      </div>
+    </div>
+
+    <h3>方式一：為目前這次 PowerShell 視窗設定（暫時）</h3>
+    <div class="code-block">
+      <span class="comment"># 將下面的 sk-ant-api03-xxxx 換成老師給你的 API Key</span><br>
+      <span class="cmd">$env:ANTHROPIC_API_KEY</span> = <span class="str">"sk-ant-api03-你的金鑰內容"</span>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.9rem;">缺點：關閉 PowerShell 後設定就消失，每次都要重新輸入。</p>
+
+    <h3>方式二：永久設定環境變數（推薦）</h3>
+    <ol class="steps">
+      <li>
+        <div class="step-content">
+          <div class="step-label">在 PowerShell 輸入以下指令</div>
+          <div class="code-block">
+            <span class="comment"># 將 sk-ant-api03-xxxx 換成老師給你的 API Key</span><br>
+            [System.Environment]::SetEnvironmentVariable(<span class="str">"ANTHROPIC_API_KEY"</span>, <span class="str">"sk-ant-api03-你的金鑰內容"</span>, <span class="str">"User"</span>)
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">關閉並重新開啟 PowerShell</div>
+          <p>環境變數設定需要新視窗才能生效</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">驗證是否設定成功</div>
+          <div class="code-block"><span class="cmd">echo $env:ANTHROPIC_API_KEY</span></div>
+          <p>應該要顯示你的 API Key 內容</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="alert alert-danger">
+      <span class="alert-icon">⚠</span>
+      <div>
+        <strong>注意：API Key 計費說明</strong>
+        <ul>
+          <li>設定環境變數後，Claude Code 會用 API Key 計費，不是老師的訂閱額度</li>
+          <li>每次使用 Claude Code 都會消耗 token（依照對話長度計費）</li>
+          <li>請不要做沒有意義的大量測試，避免浪費老師的費用</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: 第一次使用 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">5</div>
       <h2>第一次啟動 Claude Code</h2>
     </div>
-    <div class="what">你在做什麼：登入並啟動 AI 助手</div>
-    <p>在 Ubuntu 視窗中輸入：</p>
-    <div class="code-block"><span class="code-label">Ubuntu</span>claude</div>
-    <p>畫面會出現登入選項，選擇<strong>第 2 項</strong>（Anthropic Console account），然後照畫面指示完成登入。過程中會跳出瀏覽器要你授權，點同意就好。</p>
-    <div class="checkpoint">確認：看到 Claude Code 的對話介面，游標在等你輸入。安裝全部完成！</div>
+    <ol class="steps">
+      <li>
+        <div class="step-content">
+          <div class="step-label">切換到你的專案資料夾</div>
+          <div class="code-block">
+            <span class="comment"># 例如切換到桌面上的 my-project 資料夾</span><br>
+            <span class="cmd">cd</span> C:\Users\你的帳號\Desktop\my-project
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">啟動 Claude Code</div>
+          <div class="code-block"><span class="cmd">claude</span></div>
+          <p>使用 API Key 時，不需要瀏覽器登入，直接進入對話介面</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="step-label">開始使用！輸入你的第一個指令</div>
+          <div class="code-block">
+            <span class="comment"># 例如讓 Claude 幫你建立一個 Python 檔案</span><br>
+            幫我建立一個 hello.py，印出「Hello, World!」
+          </div>
+        </div>
+      </li>
+    </ol>
+    <div class="alert alert-success">
+      <span class="alert-icon">✓</span>
+      <div>
+        <strong>常用快捷鍵</strong>
+        <ul>
+          <li><code>Ctrl + C</code>：中斷目前的回應</li>
+          <li><code>/exit</code>：離開 Claude Code</li>
+          <li><code>/help</code>：查看所有指令</li>
+          <li>按 ↑ 鍵：回上一個指令</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
-  <!-- 步驟 8 -->
-  <div class="step" id="step8">
-    <div class="step-header">
-      <div class="step-num">8</div>
-      <h2>試用看看！</h2>
+  <!-- 常見問題 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">Q</div>
+      <h2>常見問題排除</h2>
     </div>
-    <p>在 Claude Code 的對話介面中，直接打中文問它問題：</p>
-    <div class="code-block">請用 Python 寫一個函式，判斷一個數字是不是質數，並解釋程式碼的邏輯</div>
-    <p>你會看到 Claude 幫你寫程式、解釋邏輯。</p>
-    <div class="tip"><strong>恭喜，你有 AI 家教了！</strong></div>
+
+    <div class="card">
+      <div class="card-title">❌ 出現「claude: command not found」或「claude 不是內部或外部命令」</div>
+      <p style="color:var(--text-muted);font-size:0.9rem;">PATH 沒有更新。解決方式：關閉並重新開啟 PowerShell 視窗。如果還是不行，手動加入 PATH：</p>
+      <div class="code-block" style="font-size:0.82rem;">
+        [System.Environment]::SetEnvironmentVariable(<span class="str">"PATH"</span>, <span class="str">"$env:PATH;$env:USERPROFILE\.local\bin"</span>, <span class="str">"User"</span>)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❌ 出現「Authentication required」或要求登入</div>
+      <p style="color:var(--text-muted);font-size:0.9rem;">API Key 沒有設定成功。請確認環境變數有設好：</p>
+      <div class="code-block"><span class="cmd">echo $env:ANTHROPIC_API_KEY</span></div>
+      <p style="color:var(--text-muted);font-size:0.9rem;">如果沒有顯示 Key，重新執行步驟 4。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❌ 出現「API error」或「rate limit exceeded」</div>
+      <p style="color:var(--text-muted);font-size:0.9rem;">API Key 使用量過高或老師暫停了 Key。請告知老師，等候重置。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❌ 安裝指令出現「The token '&&' is not a valid statement separator」</div>
+      <p style="color:var(--text-muted);font-size:0.9rem;">你在 PowerShell 裡輸入了 CMD 的指令。確認你開的是 PowerShell（視窗標題有 PS 字樣），再重新輸入安裝指令。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❌ 防毒軟體跳出警告</div>
+      <p style="color:var(--text-muted);font-size:0.9rem;">Claude Code 的 .exe 檔案有時會被防毒誤判。可以將 <code>~\.local\bin\claude.exe</code> 加入防毒軟體的排除清單，二進位檔案直接來自 Anthropic 官方伺服器。</p>
+    </div>
   </div>
 
-  <!-- 步驟 9 -->
-  <div class="step" id="step9">
-    <div class="step-header">
-      <div class="step-num">9</div>
-      <h2>在 VS Code 裡使用 Claude Code</h2>
+  <!-- 新舊對照 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">+</div>
+      <h2>新舊安裝方式對照</h2>
     </div>
-    <div class="what">你在做什麼：讓你可以一邊看程式碼、一邊跟 AI 對話</div>
-
-    <h3>9-1｜安裝 VS Code</h3>
-    <p>到 <strong>code.visualstudio.com</strong> 下載安裝。</p>
-
-    <h3>9-2｜安裝 WSL 擴充套件</h3>
-    <ol>
-      <li>打開 VS Code</li>
-      <li>按 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> 開啟擴充套件面板</li>
-      <li>搜尋 <code>WSL</code></li>
-      <li>安裝由 <strong>Microsoft</strong> 出的「<strong>WSL</strong>」擴充套件</li>
-    </ol>
-
-    <h3>9-3｜安裝 Claude Code 擴充套件</h3>
-    <ol>
-      <li>同樣在擴充套件面板搜尋 <code>Claude Code</code></li>
-      <li>安裝由 <strong>Anthropic</strong> 出的「<strong>Claude Code</strong>」擴充套件（注意看發行者名稱，選官方的）</li>
-    </ol>
-
-    <h3>9-4｜用 VS Code 連到 WSL</h3>
-    <ol>
-      <li>按 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> 開啟命令面板</li>
-      <li>輸入 <code>WSL: Connect to WSL</code></li>
-      <li>選擇 <code>Ubuntu</code></li>
-      <li>VS Code 左下角會顯示 <code>WSL: Ubuntu</code>，表示連線成功</li>
-    </ol>
-
-    <h3>9-5｜開啟 Claude Code 面板</h3>
-    <p>點 VS Code 右上角的火花圖示，或按 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> 搜尋 <code>Claude Code</code>。</p>
-
-    <div class="diagram">
-┌──────────┬──────────────────┬──────────────┐
-│          │                  │              │
-│  檔案    │   程式碼編輯區    │   Claude     │
-│  總管    │  （寫 Python）    │   Code 對話  │
-│          │                  │              │
-└──────────┴──────────────────┴──────────────┘</div>
-    <div class="checkpoint">這就是你以後寫 APCS 的工作環境！</div>
-  </div>
-
-  <!-- 每次使用 -->
-  <div class="step" id="daily">
-    <div class="step-header">
-      <div class="step-num">*</div>
-      <h2>每次使用</h2>
-    </div>
-
-    <h3>方法一：VS Code（推薦）</h3>
-    <ol>
-      <li>打開 <strong>VS Code</strong></li>
-      <li>左下角確認連到 <code>WSL: Ubuntu</code>（如果沒有，按 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> → <code>WSL: Connect to WSL</code>）</li>
-      <li>左邊開檔案、中間寫程式、右邊問 Claude</li>
-    </ol>
-
-    <h3>方法二：純終端機</h3>
-    <ol>
-      <li>從開始選單打開 <strong>Ubuntu</strong></li>
-      <li>輸入 <code>claude</code></li>
-      <li>直接在終端機裡對話</li>
-    </ol>
-  </div>
-
-  <!-- APCS 練習 -->
-  <div class="step" id="apcs">
-    <div class="step-header">
-      <div class="step-num">!</div>
-      <h2>APCS 練習建議</h2>
-    </div>
-    <p>試試在 Claude Code 裡問這些：</p>
-    <div class="code-block"><span class="comment">// 觀念題練習</span>
-我正在準備 APCS 檢測，請出一題「陣列」的觀念題讓我練習，難度中等</div>
-    <div class="code-block"><span class="comment">// 除錯引導</span>
-這段程式碼哪裡有 bug？幫我找出來但不要直接給答案，用提示引導我</div>
-    <div class="code-block"><span class="comment">// 步驟式教學</span>
-請用 Python 教我二分搜尋法，一步一步解釋，每一步都讓我先想再給答案</div>
-  </div>
-
-  <!-- 錯誤急救 -->
-  <div class="step" id="troubleshoot">
-    <div class="step-header">
-      <div class="step-num">?</div>
-      <h2>錯誤急救表</h2>
-    </div>
-    <div class="table-wrap">
+    <div class="card">
       <table>
-        <tr><th>你看到的</th><th>原因</th><th>解法</th></tr>
-        <tr><td><code>exec: node: not found</code></td><td>Node.js 沒裝好</td><td>重做步驟 4</td></tr>
-        <tr><td><code>npm ERR!</code></td><td>通常是網路問題</td><td>確認有連網，再執行一次步驟 5</td></tr>
-        <tr><td>密碼打不出來</td><td>正常的！Linux 打密碼不顯示</td><td>照打，按 Enter</td></tr>
-        <tr><td><code>wsl --install</code> 沒反應</td><td>沒用系統管理員開</td><td>回步驟 0，確認用管理員身分</td></tr>
-        <tr><td>Ubuntu 視窗閃退</td><td>WSL 沒裝完就關了</td><td>重開機，再從開始選單開 Ubuntu</td></tr>
-        <tr><td><code>EACCES permission denied</code></td><td>權限不足</td><td>在指令前面加 <code>sudo</code></td></tr>
-        <tr><td>VS Code 左下角沒有 <code>WSL: Ubuntu</code></td><td>沒連到 WSL</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <code>WSL: Connect to WSL</code></td></tr>
-        <tr><td>Claude Code 面板沒反應</td><td>擴充套件沒在 WSL 裡安裝</td><td>連到 WSL 後，重新安裝 Claude Code 擴充套件</td></tr>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>舊方式（2025 以前）</th>
+            <th>新方式（2025 起）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>需要 WSL？</td>
+            <td>✅ 必要</td>
+            <td>❌ 不需要</td>
+          </tr>
+          <tr>
+            <td>需要 Node.js？</td>
+            <td>✅ 必要（Node 18+）</td>
+            <td>❌ 不需要</td>
+          </tr>
+          <tr>
+            <td>安裝方式</td>
+            <td><code>npm install -g @anthropic-ai/claude-code</code></td>
+            <td><code>irm https://claude.ai/install.ps1 | iex</code></td>
+          </tr>
+          <tr>
+            <td>登入方式</td>
+            <td>瀏覽器 OAuth 登入（需 Claude 帳號）</td>
+            <td>API Key 環境變數（本課程方式）</td>
+          </tr>
+          <tr>
+            <td>自動更新</td>
+            <td>❌</td>
+            <td>✅ 背景自動更新</td>
+          </tr>
+          <tr>
+            <td>npm 安裝方式</td>
+            <td>✅ 官方支援</td>
+            <td><span class="tag tag-dep">已廢棄</span></td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
 
 </div>
+
+<div class="footer">
+  臺中市立安和國中 資訊科技課程 · 2026 年版 · 使用 Anthropic Claude Code
+</div>
+
 </body>
 </html>
