@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>社會科補強講義 — Obsidian + Claude</title>
+  <meta name="description" content="用 Obsidian 和 Claude 補強社會科，歷史、地理、公民一步一步搞懂，不再死背。">
+  <style>
+    :root {
+      --bg: #f7efe3;
+      --surface: rgba(255, 251, 246, 0.9);
+      --surface-strong: rgba(255, 255, 255, 0.95);
+      --ink: #1f2f39;
+      --muted: #60707a;
+      --line: rgba(31, 47, 57, 0.12);
+      --teal: #0f7b76;
+      --teal-deep: #0b5a57;
+      --amber: #df8f36;
+      --berry: #893654;
+      --blue: #2563a8;
+      --shadow: 0 18px 54px rgba(17, 48, 66, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,168,0.18), transparent 24rem),
+        radial-gradient(circle at top right, rgba(15,123,118,0.18), transparent 24rem),
+        linear-gradient(180deg, #f0f4f9 0%, #f7f9fc 48%, #eef2f8 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+    }
+    a { color: inherit; }
+    .page {
+      width: min(900px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 60px;
+    }
+    .hero, .section {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.94), rgba(240,248,255,0.84)),
+        linear-gradient(135deg, rgba(37,99,168,0.10), rgba(15,123,118,0.08));
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(12px);
+      padding: 28px 24px;
+      margin-top: 18px;
+    }
+    .hero { margin-top: 0; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(37,99,168,0.09);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+    }
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(1.9rem, 4vw, 2.9rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    h2 { margin: 0; font-size: 1.28rem; line-height: 1.35; }
+    h3 { margin: 16px 0 8px; font-size: 1.04rem; }
+    p { margin: 0 0 12px; }
+    .hero p, .lead, .muted { color: var(--muted); }
+
+    .subject-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    .subject-badge {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+    .badge-history { background: rgba(223,143,54,0.15); color: #9a6020; }
+    .badge-geo { background: rgba(15,123,118,0.12); color: var(--teal-deep); }
+    .badge-civics { background: rgba(37,99,168,0.12); color: var(--blue); }
+
+    .toc {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-top: 18px;
+    }
+    .toc ol { padding-left: 1.3em; margin: 10px 0; }
+    .toc li { margin: 6px 0; }
+    .toc a { text-decoration: none; color: var(--teal); font-weight: 700; }
+
+    .week-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+    }
+    .week-setup { background: rgba(37,99,168,0.12); color: var(--blue); }
+    .week-history { background: rgba(223,143,54,0.15); color: #9a6020; }
+    .week-geo { background: rgba(15,123,118,0.12); color: var(--teal-deep); }
+    .week-civics { background: rgba(137,54,84,0.12); color: var(--berry); }
+    .week-exam { background: rgba(31,47,57,0.08); color: var(--ink); }
+
+    .step-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .step-num {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .num-blue   { background: linear-gradient(135deg, var(--blue), #3d82d4); }
+    .num-amber  { background: linear-gradient(135deg, var(--amber), #e8a84e); }
+    .num-teal   { background: linear-gradient(135deg, var(--teal), #0fa19a); }
+    .num-berry  { background: linear-gradient(135deg, var(--berry), #b84a71); }
+    .num-dark   { background: linear-gradient(135deg, #2d4256, #3d5a73); }
+
+    .why, .do, .check, .tip, .warn {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin: 14px 0;
+    }
+    .why { background: rgba(15,123,118,0.08); border-left: 4px solid var(--teal); }
+    .do  { background: rgba(37,99,168,0.07); border-left: 4px solid var(--blue); }
+    .check { background: rgba(15,123,118,0.06); border-left: 4px solid #43c59e; }
+    .tip  { background: rgba(223,143,54,0.10); border-left: 4px solid var(--amber); }
+    .warn { background: rgba(137,54,84,0.08); border-left: 4px solid var(--berry); }
+    .why strong, .do strong, .check strong, .tip strong, .warn strong {
+      display: block; margin-bottom: 4px;
+    }
+
+    .checklist { list-style: none; padding: 0; margin: 10px 0; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.97rem;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: "☐";
+      font-size: 1.1rem;
+      color: var(--teal);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .prompt-box {
+      background: #1f2f39;
+      color: #e8f0e8;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin: 14px 0;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .prompt-label {
+      display: inline-block;
+      background: var(--blue);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-family: "Noto Sans TC", sans-serif;
+    }
+
+    .template-box {
+      background: rgba(31,47,57,0.04);
+      border: 1px dashed rgba(31,47,57,0.2);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin: 14px 0;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.87rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .subject-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin: 14px 0;
+    }
+    .subject-card {
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.88);
+    }
+    .card-history { background: rgba(223,143,54,0.08); }
+    .card-geo     { background: rgba(15,123,118,0.08); }
+    .card-civics  { background: rgba(37,99,168,0.08); }
+    .subject-card .label { font-size: 0.78rem; font-weight: 800; margin-bottom: 6px; }
+    .label-history { color: #9a6020; }
+    .label-geo { color: var(--teal-deep); }
+    .label-civics { color: var(--blue); }
+    .subject-card strong { display: block; margin-bottom: 4px; }
+    .subject-card p { font-size: 0.88rem; color: var(--muted); margin: 0; }
+
+    .sop-step {
+      display: flex; gap: 14px; margin: 10px 0; align-items: flex-start;
+    }
+    .sop-num {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--blue), #3d82d4);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .nav-bar {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 4px;
+    }
+    .nav-bar a { text-decoration: none; color: var(--teal); font-weight: 700; font-size: 0.9rem; }
+    .nav-bar span { color: var(--muted); font-size: 0.85rem; }
+
+    .progress-table {
+      width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.92rem;
+    }
+    .progress-table th {
+      text-align: left; padding: 8px 12px;
+      background: rgba(37,99,168,0.06); font-size: 0.85rem;
+    }
+    .progress-table td {
+      padding: 8px 12px; border-bottom: 1px solid var(--line); color: var(--muted);
+    }
+    .progress-table tr:last-child td { border-bottom: none; }
+
+    .goal-box {
+      background: linear-gradient(135deg, rgba(37,99,168,0.10), rgba(15,123,118,0.10));
+      border: 1px solid rgba(37,99,168,0.2);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      margin-top: 14px;
+    }
+    .goal-box h3 { margin: 0 0 8px; color: var(--blue); }
+
+    .quick-tip-grid {
+      display: grid; gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin: 14px 0;
+    }
+    .quick-tip-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.88);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+    .quick-tip-card strong { display: block; margin-bottom: 8px; font-size: 0.97rem; }
+    .quick-tip-card p { font-size: 0.88rem; color: var(--muted); margin: 0 0 8px; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Nav -->
+  <div class="nav-bar">
+    <a href="index.html">← 回首頁</a>
+    <span>/</span>
+    <span>社會科補強講義</span>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="eyebrow">學生講義 — 社會科</span>
+    <h1>社會科補強講義</h1>
+    <p>用 Obsidian 整理歷史、地理、公民筆記，用 Claude 搞懂「為什麼」。<br>不需要死背，理解脈絡才是關鍵。</p>
+
+    <div class="subject-badges">
+      <span class="subject-badge badge-history">📜 歷史</span>
+      <span class="subject-badge badge-geo">🗺 地理</span>
+      <span class="subject-badge badge-civics">⚖️ 公民</span>
+    </div>
+
+    <div class="subject-grid">
+      <div class="subject-card card-history">
+        <div class="label label-history">工具一</div>
+        <strong>Obsidian</strong>
+        <p>整理三科筆記、時間軸、題目分析，做成你自己的複習本</p>
+      </div>
+      <div class="subject-card card-geo">
+        <div class="label label-geo">工具二</div>
+        <strong>Claude（AI 助手）</strong>
+        <p>解釋看不懂的概念、出題考你、幫你找記憶口訣</p>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:4px;">
+      <strong>社會科學習的關鍵</strong>
+      社會科不是死背，是「理解脈絡」。用 Claude 搞懂「為什麼」，用 Obsidian 整理「是什麼」，兩個工具搭配，讓你不再只是硬記。
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <strong>目錄</strong>
+    <ol>
+      <li><a href="#setup">第一週：安裝工具，完成第一則筆記</a>（Step 1–5）</li>
+      <li><a href="#history">第二週：用 Claude 搞懂歷史脈絡</a>（Step 6–9）</li>
+      <li><a href="#geo">第三週：征服地理——地圖概念與特徵記憶</a>（Step 10–13）</li>
+      <li><a href="#civics">第四週：搞定公民——理解概念不死背</a>（Step 14–16）</li>
+      <li><a href="#exam">第五週起：模擬考試與弱點補強</a>（Step 17–19）</li>
+      <li><a href="#daily">日常複習小技巧</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SETUP ===== -->
+  <div class="section" id="setup">
+    <span class="week-badge week-setup">第一週</span>
+    <h2>安裝工具，完成第一則筆記</h2>
+
+    <!-- Step 1 -->
+    <div style="margin-top:22px;">
+      <div class="step-head">
+        <div class="step-num num-blue">1</div>
+        <div><h3 style="margin:0;">安裝 Obsidian</h3></div>
+      </div>
+      <ul class="checklist">
+        <li>打開瀏覽器，前往 <strong>obsidian.md</strong>，點「Download」選 Windows 版本</li>
+        <li>執行安裝檔，一路按「下一步」直到完成</li>
+        <li>打開 Obsidian，點「<strong>建立新的 Vault</strong>」，名稱：<code>社會科筆記</code></li>
+        <li>選一個你找得到的位置（建議放在文件資料夾），按「建立」</li>
+        <li>看到左側有檔案列表、右側是空白編輯區 ✅</li>
+      </ul>
+    </div>
+
+    <!-- Step 2 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-blue">2</div>
+        <div><h3 style="margin:0;">學會五個必用語法</h3></div>
+      </div>
+      <div class="template-box"># 這是大標題（例如：台灣史）
+
+## 這是中標題（例如：荷蘭統治時期）
+
+**這樣的文字會變粗體**（適合標出重點）
+
+- 這是清單第一點
+- 這是清單第二點
+
+> 這樣輸入會變引用框（適合記老師說的重要提醒）</div>
+      <ul class="checklist">
+        <li>把上面五種語法都試過一次</li>
+      </ul>
+    </div>
+
+    <!-- Step 3 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-blue">3</div>
+        <div><h3 style="margin:0;">建立社會科筆記資料夾架構</h3><span class="muted" style="font-size:0.9rem;">左側右鍵 → 建立資料夾</span></div>
+      </div>
+      <div class="template-box">社會科筆記/
+├── 01_歷史/
+│   ├── 台灣史/
+│   ├── 中國史/
+│   └── 世界史/
+├── 02_地理/
+│   ├── 台灣地理/
+│   └── 世界地理/
+├── 03_公民/
+│   ├── 民主政治/
+│   └── 法律與生活/
+├── 04_考題練習/
+└── 00_複習清單.md</div>
+      <ul class="checklist">
+        <li>建立「01_歷史」及其三個子資料夾</li>
+        <li>建立「02_地理」及其兩個子資料夾</li>
+        <li>建立「03_公民」及其兩個子資料夾</li>
+        <li>建立「04_考題練習」資料夾</li>
+        <li>建立「00_複習清單.md」筆記</li>
+      </ul>
+    </div>
+
+    <!-- Step 4 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-blue">4</div>
+        <div><h3 style="margin:0;">第一次使用 Claude</h3></div>
+      </div>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">你好！我是國中生，社會科比較弱，想請你幫我補強。
+社會科包含歷史、地理、公民三科。
+之後我會貼課本內容或問問題，請用國中生看得懂的方式解釋，謝謝！</div>
+      <ul class="checklist">
+        <li>Claude 有回應了嗎？✅</li>
+      </ul>
+    </div>
+
+    <!-- Step 5 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-blue">5</div>
+        <div><h3 style="margin:0;">完成第一則「我不懂的概念」筆記</h3></div>
+      </div>
+      <div class="do"><strong>先想一個你目前最看不懂的社會科概念</strong>
+      <p style="margin:4px 0 0; font-size:0.93rem;">例如：「三權分立」、「清朝的閉關鎖國」、「板塊運動」……</p></div>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">請用國中生能懂的方式解釋「（你不懂的概念）」，
+並舉一個生活中的例子幫助我理解。</div>
+      <div class="template-box"># 概念：（概念名稱）
+
+## 原本課本的說法
+（課本怎麼寫的）
+
+## Claude 的解釋
+（把 Claude 的說明貼過來）
+
+## 生活中的例子
+（Claude 舉的例子）
+
+## 我自己的理解
+（用自己的話，說一遍這個概念是什麼）</div>
+      <ul class="checklist">
+        <li>儲存筆記（Ctrl + S）</li>
+      </ul>
+      <div class="check"><strong>🎉 社會科筆記本正式啟動！</strong></div>
+    </div>
+  </div>
+
+  <!-- ===== HISTORY ===== -->
+  <div class="section" id="history">
+    <span class="week-badge week-history">第二週</span>
+    <h2>📜 用 Claude 搞懂歷史脈絡</h2>
+
+    <!-- Step 6 -->
+    <div style="margin-top:22px;">
+      <div class="step-head">
+        <div class="step-num num-amber">6</div>
+        <div><h3 style="margin:0;">選定你最弱的歷史單元</h3></div>
+      </div>
+      <div class="do"><strong>常見較難的單元</strong>
+        <ul style="margin:6px 0 0; padding-left:1.3em; color:var(--muted); font-size:0.93rem;">
+          <li>台灣史：荷蘭、鄭氏、清朝、日治各時期</li>
+          <li>中國史：朝代更迭、近代史、鴉片戰爭</li>
+          <li>世界史：工業革命、兩次世界大戰</li>
+        </ul>
+      </div>
+      <ul class="checklist">
+        <li>決定這週要補強的歷史單元：_______________</li>
+      </ul>
+    </div>
+
+    <!-- Step 7 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-amber">7</div>
+        <div><h3 style="margin:0;">建立歷史時間軸筆記</h3><span class="muted" style="font-size:0.9rem;">命名：時間軸_（單元名稱）</span></div>
+      </div>
+      <div class="template-box"># 時間軸：台灣史（以台灣史為例）
+
+## 荷蘭統治時期（1624–1662）
+- 發生了什麼：
+- 為什麼重要：
+- 結束原因：
+
+## 鄭氏時期（1662–1683）
+- 發生了什麼：
+- 為什麼重要：
+- 結束原因：
+
+## 清朝統治時期（1683–1895）
+- 發生了什麼：
+- 為什麼重要：
+- 結束原因：
+
+## 日治時期（1895–1945）
+- 發生了什麼：
+- 為什麼重要：
+- 結束原因：</div>
+      <ul class="checklist">
+        <li>先照課本內容填入你知道的部分</li>
+      </ul>
+    </div>
+
+    <!-- Step 8 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-amber">8</div>
+        <div><h3 style="margin:0;">用 Claude 補充時間軸</h3></div>
+      </div>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">以下是台灣史的時間軸，有些地方我還不清楚，請幫我補充：
+（貼上你的時間軸，包含空白的部分）
+
+請特別解釋：
+1. 每個時期「結束」的原因（為什麼換人統治）
+2. 這段歷史對台灣現在有什麼影響</div>
+      <ul class="checklist">
+        <li>把 Claude 的補充整理回 Obsidian 筆記</li>
+      </ul>
+    </div>
+
+    <!-- Step 9 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-amber">9</div>
+        <div><h3 style="margin:0;">請 Claude 出題考你</h3></div>
+      </div>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">針對「（你選的歷史單元）」，
+國中會考最常考哪幾種題型？
+請給我 5 個典型考題，但先不要給答案，讓我試著回答。</div>
+      <p style="color:var(--muted); font-size:0.93rem;">回答完後，貼上你的答案請 Claude 批改：</p>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">以下是我的回答，請幫我批改，
+並針對我答錯的地方詳細解釋：
+（貼上你的答案）</div>
+      <ul class="checklist">
+        <li>試著回答 5 題</li>
+        <li>把答錯的題目和正確解釋，存到「04_考題練習」資料夾</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== GEO ===== -->
+  <div class="section" id="geo">
+    <span class="week-badge week-geo">第三週</span>
+    <h2>🗺 征服地理——地圖概念與特徵記憶</h2>
+
+    <!-- Step 10 -->
+    <div style="margin-top:22px;">
+      <div class="step-head">
+        <div class="step-num num-teal">10</div>
+        <div><h3 style="margin:0;">選定地理弱項單元</h3></div>
+      </div>
+      <div class="do"><strong>常見較難的地理單元</strong>
+        <ul style="margin:6px 0 0; padding-left:1.3em; color:var(--muted); font-size:0.93rem;">
+          <li>台灣地形、氣候、河川特徵</li>
+          <li>世界氣候類型</li>
+          <li>各大洲地理特徵</li>
+        </ul>
+      </div>
+      <ul class="checklist">
+        <li>決定這週要補強的地理單元：_______________</li>
+      </ul>
+    </div>
+
+    <!-- Step 11 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-teal">11</div>
+        <div><h3 style="margin:0;">建立地理特徵筆記</h3></div>
+      </div>
+      <div class="template-box"># 台灣地形特徵
+
+## 五大地形類型
+| 地形 | 特徵 | 分布位置 | 代表例子 |
+|------|------|---------|---------|
+| 山地 | | | |
+| 丘陵 | | | |
+| 台地 | | | |
+| 盆地 | | | |
+| 平原 | | | |
+
+## 重要山脈
+- 中央山脈：
+- 雪山山脈：
+- 玉山山脈：</div>
+      <ul class="checklist">
+        <li>先填入你知道的內容</li>
+      </ul>
+    </div>
+
+    <!-- Step 12 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-teal">12</div>
+        <div><h3 style="margin:0;">用 Claude 幫你記憶地理特徵</h3></div>
+      </div>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">我在學台灣地理，請幫我：
+1. 用「聯想記憶法」或「口訣」幫我記住台灣五大地形的特色
+2. 說明這些地形怎麼影響台灣人的生活和產業
+3. 出 3 題地理選擇題考我</div>
+      <ul class="checklist">
+        <li>把好用的口訣或記憶方式加入筆記</li>
+      </ul>
+    </div>
+
+    <!-- Step 13 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-teal">13</div>
+        <div><h3 style="margin:0;">建立「地理 vs 生活」連結筆記</h3></div>
+      </div>
+      <div class="why"><strong>為什麼要做這個？</strong>地理很難記，是因為感覺跟生活沒關係。理解「地理怎麼影響生活」，就不容易忘了。</div>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">請幫我舉例說明，台灣的地理特徵（地形、氣候、河川）
+怎麼影響了以下這些生活面向，並說明原因：
+1. 台灣各地的農業作物為什麼不同？
+2. 台灣哪些地方容易淹水？為什麼？
+3. 台灣的都市為什麼大多在西部？</div>
+      <ul class="checklist">
+        <li>在「台灣地理」資料夾新建「地理_生活連結」筆記，整理進去</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== CIVICS ===== -->
+  <div class="section" id="civics">
+    <span class="week-badge week-civics">第四週</span>
+    <h2>⚖️ 搞定公民——理解概念不死背</h2>
+
+    <!-- Step 14 -->
+    <div style="margin-top:22px;">
+      <div class="step-head">
+        <div class="step-num num-berry">14</div>
+        <div><h3 style="margin:0;">選定公民弱項單元</h3></div>
+      </div>
+      <div class="do"><strong>常見較難的公民單元</strong>
+        <ul style="margin:6px 0 0; padding-left:1.3em; color:var(--muted); font-size:0.93rem;">
+          <li>三權分立、五權憲法</li>
+          <li>人權與基本權利</li>
+          <li>法律概念（刑法、民法）</li>
+          <li>經濟概念（供需、GDP）</li>
+        </ul>
+      </div>
+      <ul class="checklist">
+        <li>決定這週要補強的公民單元：_______________</li>
+      </ul>
+    </div>
+
+    <!-- Step 15 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-berry">15</div>
+        <div><h3 style="margin:0;">建立公民概念解析筆記</h3><span class="muted" style="font-size:0.9rem;">命名：（概念名稱）_解析</span></div>
+      </div>
+      <div class="template-box"># 概念解析：三權分立（以三權分立為例）
+
+## 是什麼？
+（用一句話說明）
+
+## 為什麼需要這樣設計？
+（這個制度的目的）
+
+## 三個「權」分別是什麼？
+| 名稱 | 機關 | 負責的事情 |
+|------|------|----------|
+| 立法權 | 立法院 | |
+| 行政權 | 行政院 | |
+| 司法權 | 司法院 | |
+
+## 如果沒有三權分立，會怎樣？
+（這樣思考更容易記住為什麼重要）
+
+## 生活中的例子
+（Claude 幫忙舉的例子）
+
+## 考試常考的陷阱
+（Claude 提醒的）</div>
+    </div>
+
+    <!-- Step 16 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-berry">16</div>
+        <div><h3 style="margin:0;">用 Claude 建立「為什麼」的理解</h3></div>
+      </div>
+      <div class="why"><strong>公民科學習關鍵</strong>公民科最忌諱只背答案，不知道為什麼。先問「如果沒有這個制度，會怎樣？」再理解「它解決了什麼問題」。</div>
+      <div class="prompt-label">貼給 Claude</div>
+      <div class="prompt-box">我在學國中公民「（你選的單元）」，
+請用以下方式幫我理解：
+1. 先說明「如果沒有這個制度/概念，社會會發生什麼問題」
+2. 再解釋這個制度/概念「如何解決這個問題」
+3. 舉一個台灣近年發生過的新聞事件作為例子
+4. 最後出一題申論題讓我練習</div>
+      <ul class="checklist">
+        <li>把理解整理進 Obsidian 筆記</li>
+        <li>試著回答申論題，再請 Claude 批改</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== EXAM ===== -->
+  <div class="section" id="exam">
+    <span class="week-badge week-exam">第五週起</span>
+    <h2>模擬考試與弱點補強</h2>
+
+    <!-- Step 17 -->
+    <div style="margin-top:22px;">
+      <div class="step-head">
+        <div class="step-num num-dark">17</div>
+        <div><h3 style="margin:0;">建立個人弱點清單</h3><span class="muted" style="font-size:0.9rem;">打開「00_複習清單.md」</span></div>
+      </div>
+      <div class="template-box"># 社會科弱點複習清單
+
+## 歷史弱點
+- [ ] （概念）— 不懂的地方：
+- [ ]
+
+## 地理弱點
+- [ ]
+- [ ]
+
+## 公民弱點
+- [ ]
+- [ ]
+
+## 已補強完成 ✅
+- [x] （已搞懂的概念）— 搞懂日期：</div>
+      <ul class="checklist">
+        <li>把前幾週遇到的不懂項目都填進來</li>
+      </ul>
+    </div>
+
+    <!-- Step 18 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-dark">18</div>
+        <div><h3 style="margin:0;">每週模擬考試 SOP</h3><span class="muted" style="font-size:0.9rem;">每週固定一天照這個流程</span></div>
+      </div>
+
+      <div class="sop-step">
+        <div class="sop-num">①</div>
+        <div>
+          <strong>請 Claude 出模擬題（10 分鐘準備）</strong>
+          <div class="prompt-box" style="margin-top:8px; font-size:0.85rem;">請幫我出一份社會科模擬考，包含：
+- 歷史選擇題 5 題（範圍：______）
+- 地理選擇題 5 題（範圍：______）
+- 公民選擇題 5 題（範圍：______）
+- 申論題 1 題
+
+題目出好後，先不要給答案，等我作答完再說。</div>
+        </div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">②</div>
+        <div>
+          <strong>認真作答（20 分鐘）</strong>
+          <p style="margin:4px 0 0; color:var(--muted); font-size:0.93rem;">不要開課本或筆記，當作真的考試來作答。</p>
+        </div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">③</div>
+        <div>
+          <strong>請 Claude 批改並解析</strong>
+          <div class="prompt-box" style="margin-top:8px; font-size:0.85rem;">以下是我的作答，請批改並解析每一題：
+（貼上你的答案：第1題：(A)、第2題：(C)……）
+
+重點：對於我答錯的題目，請告訴我：
+1. 正確答案是什麼
+2. 我可能因為什麼觀念錯誤才答錯
+3. 這個概念的正確理解方式</div>
+        </div>
+      </div>
+      <div class="sop-step">
+        <div class="sop-num">④</div>
+        <div>
+          <strong>更新弱點清單</strong>
+          <p style="margin:4px 0 0; color:var(--muted); font-size:0.93rem;">把這次答錯的概念加入「00_複習清單.md」，已補強的標記完成。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 19 -->
+    <div style="margin-top:24px;">
+      <div class="step-head">
+        <div class="step-num num-dark">19</div>
+        <div><h3 style="margin:0;">存檔每次練習結果</h3><span class="muted" style="font-size:0.9rem;">在「04_考題練習」資料夾</span></div>
+      </div>
+      <div class="template-box"># 模擬考練習 — 2026/___/___
+
+## 分數
+- 歷史：（X/5）
+- 地理：（X/5）
+- 公民：（X/5）
+
+## 這次答錯的題目
+| 題號 | 我的答案 | 正確答案 | 錯誤原因 |
+|------|---------|---------|---------|
+| | | | |
+
+## 這次的收穫
+（用一兩句話說你學到什麼）
+
+## 下次要特別注意
+（寫下下次複習的重點）</div>
+    </div>
+  </div>
+
+  <!-- ===== DAILY ===== -->
+  <div class="section" id="daily">
+    <h2>日常複習小技巧（5 分鐘就能做）</h2>
+    <p class="muted">不需要長時間坐下來讀書，以下方法零碎時間就能用：</p>
+
+    <div class="quick-tip-grid">
+      <div class="quick-tip-card">
+        <strong>方法一：讓 Claude 考考你</strong>
+        <p>請 Claude 出 3 個快問快答題，一次一題，等你回答後再出下一題。</p>
+        <div class="prompt-box" style="font-size:0.82rem; margin:0;">請針對（歷史/地理/公民）出 3 個快問快答題目，
+一次只出一題，等我回答後再出下一題。</div>
+      </div>
+      <div class="quick-tip-card">
+        <strong>方法二：用新聞學社會科</strong>
+        <p>把新聞標題貼給 Claude，問它跟哪個課本概念有關。</p>
+        <div class="prompt-box" style="font-size:0.82rem; margin:0;">這個新聞：「（標題）」
+請說明這跟國中公民/地理/歷史哪個概念有關？</div>
+      </div>
+      <div class="quick-tip-card">
+        <strong>方法三：睡前寫一行</strong>
+        <p>每天在 Obsidian 寫一行「今天學了什麼」，養成習慣最重要。</p>
+        <div class="template-box" style="font-size:0.82rem; margin:0;">今天學了：（概念名稱）
+用一句話說明：（自己解釋）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 進度追蹤 -->
+  <div class="section">
+    <h2>學習進度追蹤表</h2>
+    <p class="muted">複製貼入 Obsidian 的「00_複習清單.md」，每完成一步就改成 ✅</p>
+    <table class="progress-table">
+      <thead><tr><th>週次</th><th>步驟</th><th>內容</th></tr></thead>
+      <tbody>
+        <tr><td>第一週</td><td>Step 1–5</td><td>安裝工具、完成第一則概念筆記</td></tr>
+        <tr><td>第二週</td><td>Step 6–9</td><td>歷史時間軸＋出題練習</td></tr>
+        <tr><td>第三週</td><td>Step 10–13</td><td>地理特徵筆記＋生活連結</td></tr>
+        <tr><td>第四週</td><td>Step 14–16</td><td>公民概念解析＋申論練習</td></tr>
+        <tr><td>第五週起</td><td>Step 17–19</td><td>每週模擬考＋弱點補強</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Q&A -->
+  <div class="section">
+    <h2>常見問題</h2>
+    <div style="margin-top:14px; display:flex; flex-direction:column; gap:12px;">
+      <div class="why">
+        <strong>Q：課本好厚，不知道從哪裡開始？</strong>
+        從你最近一次考試考最差的單元開始。先把最痛的地方補起來，進步最快。
+      </div>
+      <div class="why">
+        <strong>Q：我背了又忘，怎麼辦？</strong>
+        這是正常的！關鍵是「理解」不是「死背」。每次重學一個概念，先問自己「這個為什麼會發生？」有了因果關係就比較不容易忘。
+      </div>
+      <div class="why">
+        <strong>Q：Claude 回答太長，我看不完？</strong>
+        告訴 Claude：「請用條列式整理，每點不超過兩行。」它就會說得更精簡。
+      </div>
+      <div class="why">
+        <strong>Q：地理要背的東西太多，有沒有訣竅？</strong>
+        請 Claude 幫你做「比較表」，把相似概念放在一起比較，記憶效率高很多。例如：「請用表格比較台灣五大地形的特徵和分布。」
+      </div>
+    </div>
+  </div>
+
+  <!-- Goal -->
+  <div class="section">
+    <div class="goal-box">
+      <h3>🎯 你的第一個目標</h3>
+      <p style="color:var(--ink); margin:0;">本週結束前，完成 <strong>Step 1 到 Step 5</strong>。<br>
+      也就是：裝好 Obsidian、用過一次 Claude、搞懂一個你一直不懂的概念。<br><br>
+      記住：<strong>每天進步一點點，比一次讀很多更有效。</strong><br>
+      就算今天只問了 Claude 一個問題，也算成功！</p>
+    </div>
+  </div>
+
+  <!-- Footer nav -->
+  <div style="margin-top:24px; text-align:center;">
+    <a href="index.html" style="text-decoration:none; color:var(--teal); font-weight:700;">← 回學生自學首頁</a>
+  </div>
+
+</div>
+</body>
+</html>
